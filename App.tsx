@@ -16,7 +16,12 @@ function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
 
   const navigateToPrivacy = () => setCurrentPage('privacy');
-  const navigateToHome = () => setCurrentPage('home');
+  
+  const navigateToHome = () => {
+    setCurrentPage('home');
+    window.scrollTo(0, 0); // Correção: Força o scroll para o topo ao voltar para a home
+  };
+  
   const navigateToSuccess = () => setCurrentPage('success');
 
   return (

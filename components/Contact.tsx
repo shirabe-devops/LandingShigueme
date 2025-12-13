@@ -14,7 +14,7 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
     revenue: '',   // Novo: Qualificação de Porte
     regime: '',    // Novo: Qualificação Técnica
     sector: '',    // Novo: Contexto de Mercado
-    mainNeed: '',  // Novo: Dor do Cliente
+    mainNeed: '',  // Novo: Dor do Cliente / Problema Tributário
     message: ''
   });
 
@@ -39,7 +39,7 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
       case 'mainNeed':
         return value !== ''; 
       case 'company':
-        return true; // Mantido opcional, mas encorajado visualmente
+        return true; 
       default:
         return true;
     }
@@ -67,6 +67,7 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
 
     setIsSubmitting(true);
 
+    // Simulação de envio para API / CRM
     setTimeout(() => {
       console.log("Lead Qualificado Enviado:", formData);
       setFormData({ 
@@ -94,7 +95,6 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
   };
 
   const getInputClasses = (fieldName: string) => {
-    // Adicionado text-slate-900 e bg-white explicitamente para todos os inputs
     const baseClasses = "w-full rounded-lg border p-3 outline-none transition-all duration-200 pr-10 bg-white text-slate-900 appearance-none"; 
     const isTouched = touched[fieldName];
     const isValid = isFieldValid(fieldName);
@@ -234,7 +234,7 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
                                 className={getInputClasses('revenue')}
                             >
                                 <option value="">Selecione uma opção</option>
-                                <option value="ate_50k">Até R$ 50 mil</option>
+                                <option value="ate_50k">Até R$ 50 mil (MEI/Micro)</option>
                                 <option value="50k_300k">R$ 50 mil a R$ 300 mil</option>
                                 <option value="300k_1m">R$ 300 mil a R$ 1 Milhão</option>
                                 <option value="1m_5m">R$ 1 Milhão a R$ 5 Milhões</option>
@@ -287,11 +287,12 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
                                 className={getInputClasses('sector')}
                             >
                                 <option value="">Selecione o setor</option>
-                                <option value="industria">Indústria</option>
+                                <option value="industria">Indústria (Transformação)</option>
                                 <option value="comercio">Comércio / Varejo</option>
                                 <option value="servicos">Prestação de Serviços</option>
                                 <option value="agro">Agronegócio</option>
                                 <option value="transporte">Transporte / Logística</option>
+                                <option value="saude">Saúde / Clínicas</option>
                                 <option value="outro">Outro</option>
                             </select>
                             <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none text-slate-500">
@@ -314,12 +315,13 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
                                 className={getInputClasses('mainNeed')}
                             >
                                 <option value="">Qual o seu maior desafio?</option>
-                                <option value="reduzir_carga">Reduzir Carga Tributária</option>
+                                <option value="reduzir_carga">Reduzir Impostos (Planejamento)</option>
+                                <option value="dividas">Regularização de Dívidas / Parcelamento</option>
                                 <option value="recuperacao_credito">Recuperação de Créditos (Passado)</option>
                                 <option value="reforma_tributaria">Adequação à Reforma Tributária</option>
                                 <option value="bpo">Terceirização Financeira (BPO)</option>
-                                <option value="regularizacao">Regularização de Dívidas</option>
-                                <option value="duvidas">Tirar dúvidas pontuais</option>
+                                <option value="fiscalizacao">Estou sob Fiscalização / Autuação</option>
+                                <option value="abertura">Abertura de Empresa</option>
                             </select>
                             <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none text-slate-500">
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -331,7 +333,7 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
 
               {/* BLOCO 3: Mensagem */}
               <div className="relative">
-                <label htmlFor="message" className="block text-sm font-bold text-slate-700 mb-1">Detalhes Adicionais *</label>
+                <label htmlFor="message" className="block text-sm font-bold text-slate-700 mb-1">Detalhes do Problema *</label>
                 <div className="relative">
                     <textarea
                     name="message"
@@ -343,7 +345,7 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
                     onBlur={handleBlur}
                     disabled={isSubmitting}
                     className={getInputClasses('message')}
-                    placeholder="Descreva brevemente o problema que deseja resolver..."
+                    placeholder="Descreva brevemente sua situação atual ou o problema que deseja resolver..."
                     ></textarea>
                      {touched.message && (
                         <div className="absolute top-3 right-3 pointer-events-none">
