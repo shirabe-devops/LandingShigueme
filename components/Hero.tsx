@@ -153,10 +153,10 @@ export const Hero: React.FC = () => {
              
              {/* 
                  ORBIT SYSTEM CONTAINER 
-                 Scaled specifically for responsive devices to ensure the animation fits everywhere.
-                 UPDATED: Mobile scale increased from 0.6 to 0.75 for better visibility.
+                 Fixed: Used shrink-0 and specific w/h for mobile to ensure circle shape.
+                 Mobile: 340px (no scale). Desktop: 500px.
              */}
-             <div className="relative w-[500px] h-[500px] orbit-system scale-[0.75] sm:scale-[0.9] lg:scale-100 transition-transform duration-500 origin-center">
+             <div className="relative w-[340px] h-[340px] sm:w-[500px] sm:h-[500px] orbit-system scale-100 lg:scale-100 transition-all duration-500 origin-center shrink-0">
                 
                 {/* 1. The Center Point (Void/Crosshair) - No Heavy Anchor */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4">
@@ -203,51 +203,51 @@ export const Hero: React.FC = () => {
 
                     {/* Widget 1: Economia (Top Right) */}
                     <div className="absolute top-[8%] right-[8%]">
-                       <div className="animate-item-fix-cw bg-slate-900/80 backdrop-blur-md p-4 rounded-2xl border border-slate-700/50 shadow-[0_0_30px_rgba(0,0,0,0.5)] flex items-center gap-3 w-48 hover:border-green-500/50 transition-colors">
-                           <div className="bg-green-500/20 p-2.5 rounded-xl shrink-0">
-                             <IconCircleDollar className="w-5 h-5 text-green-400" />
+                       <div className="animate-item-fix-cw bg-slate-900/80 backdrop-blur-md p-3 md:p-4 rounded-2xl border border-slate-700/50 shadow-[0_0_30px_rgba(0,0,0,0.5)] flex items-center gap-3 w-40 md:w-48 hover:border-green-500/50 transition-colors">
+                           <div className="bg-green-500/20 p-2 md:p-2.5 rounded-xl shrink-0">
+                             <IconCircleDollar className="w-4 h-4 md:w-5 md:h-5 text-green-400" />
                            </div>
                            <div>
-                             <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Economia Anual</p>
-                             <p className="text-white font-bold text-lg">R$ 1.25 M</p>
+                             <p className="text-slate-400 text-[9px] md:text-[10px] font-bold uppercase tracking-wider">Economia Anual</p>
+                             <p className="text-white font-bold text-base md:text-lg">R$ 1.25 M</p>
                            </div>
                        </div>
                     </div>
 
                     {/* NEW WIDGET: Tax Burden Reduction (Top Left) */}
                     <div className="absolute top-[18%] left-[5%]">
-                       <div className="animate-item-fix-cw bg-slate-900/80 backdrop-blur-md px-3 py-2 rounded-lg border border-slate-700/50 shadow-lg flex flex-col items-center gap-1 w-24 hover:scale-105 transition-transform cursor-default">
-                           <span className="text-[9px] text-slate-400 uppercase font-bold tracking-wider">Carga Efetiva</span>
+                       <div className="animate-item-fix-cw bg-slate-900/80 backdrop-blur-md px-3 py-2 rounded-lg border border-slate-700/50 shadow-lg flex flex-col items-center gap-1 w-20 md:w-24 hover:scale-105 transition-transform cursor-default">
+                           <span className="text-[8px] md:text-[9px] text-slate-400 uppercase font-bold tracking-wider">Carga Ef.</span>
                            <div className="flex items-center gap-1 text-green-400">
                                <IconTrendingUp className="w-3 h-3 rotate-180" />
-                               <span className="text-sm font-bold">-12%</span>
+                               <span className="text-xs md:text-sm font-bold">-12%</span>
                            </div>
                        </div>
                     </div>
 
                     {/* Widget 2: Planejamento (Left) */}
-                    <div className="absolute top-1/2 -left-6 -translate-y-1/2">
-                       <div className="animate-item-fix-cw bg-slate-900/90 backdrop-blur-xl p-3 rounded-xl border border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.15)] flex flex-col gap-2 w-40 hover:scale-105 transition-transform">
+                    <div className="absolute top-1/2 -left-2 md:-left-6 -translate-y-1/2">
+                       <div className="animate-item-fix-cw bg-slate-900/90 backdrop-blur-xl p-3 rounded-xl border border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.15)] flex flex-col gap-2 w-32 md:w-40 hover:scale-105 transition-transform">
                           <div className="flex items-center gap-2 border-b border-slate-700/50 pb-2">
                             <IconLayers className="w-4 h-4 text-cyan-400" />
-                            <span className="text-cyan-100 text-xs font-bold">Simulação IVA</span>
+                            <span className="text-cyan-100 text-[10px] md:text-xs font-bold">Simulação IVA</span>
                           </div>
                           <div className="flex justify-between items-center">
-                             <span className="text-[10px] text-slate-400">Cenário</span>
-                             <span className="text-xs text-green-400 font-mono font-bold">OTIMIZADO</span>
+                             <span className="text-[9px] md:text-[10px] text-slate-400">Cenário</span>
+                             <span className="text-[10px] md:text-xs text-green-400 font-mono font-bold">OTIMIZADO</span>
                           </div>
                        </div>
                     </div>
 
                     {/* Widget 3: Compliance/Shield (Bottom Left) */}
                     <div className="absolute bottom-[10%] left-[10%]">
-                       <div className="animate-item-fix-cw bg-slate-800/80 backdrop-blur-md px-4 py-3 rounded-full border border-slate-600/50 shadow-xl flex items-center gap-3">
+                       <div className="animate-item-fix-cw bg-slate-800/80 backdrop-blur-md px-3 py-2 md:px-4 md:py-3 rounded-full border border-slate-600/50 shadow-xl flex items-center gap-2 md:gap-3">
                            <div className="bg-blue-500 rounded-full p-1">
-                               <IconShield className="w-3 h-3 text-white" />
+                               <IconShield className="w-2.5 h-2.5 md:w-3 md:h-3 text-white" />
                            </div>
                            <div className="flex flex-col">
-                               <span className="text-[10px] text-slate-300 uppercase font-semibold">Risco Fiscal</span>
-                               <span className="text-white text-xs font-bold">0% Detectado</span>
+                               <span className="text-[9px] md:text-[10px] text-slate-300 uppercase font-semibold">Risco Fiscal</span>
+                               <span className="text-white text-[10px] md:text-xs font-bold">0% Detectado</span>
                            </div>
                        </div>
                     </div>
@@ -261,21 +261,21 @@ export const Hero: React.FC = () => {
                              </div>
                              <div className="flex flex-col">
                                  <span className="text-[8px] text-purple-200 uppercase font-bold">Auditoria IA</span>
-                                 <span className="text-[10px] text-white font-mono animate-pulse">EM PROCESSO...</span>
+                                 <span className="text-[9px] md:text-[10px] text-white font-mono animate-pulse">EM PROCESSO...</span>
                              </div>
                          </div>
                     </div>
 
                     {/* Widget 4: Graph (Right Center) */}
-                    <div className="absolute top-1/2 -right-4 -translate-y-1/2">
-                       <div className="animate-item-fix-cw bg-slate-900/80 backdrop-blur-md p-3 rounded-xl border border-slate-700/50 shadow-xl">
-                          <div className="flex items-end gap-1.5 h-10 mb-1 border-b border-slate-700 pb-1 w-full justify-center">
-                            <div className="w-2.5 bg-slate-700 h-[40%] rounded-t-sm"></div>
-                            <div className="w-2.5 bg-slate-600 h-[60%] rounded-t-sm"></div>
-                            <div className="w-2.5 bg-slate-500 h-[80%] rounded-t-sm"></div>
-                            <div className="w-2.5 bg-gradient-to-t from-green-600 to-green-400 h-[100%] rounded-t-sm shadow-[0_0_8px_rgba(34,197,94,0.4)]"></div>
+                    <div className="absolute top-1/2 -right-0 md:-right-4 -translate-y-1/2">
+                       <div className="animate-item-fix-cw bg-slate-900/80 backdrop-blur-md p-2 md:p-3 rounded-xl border border-slate-700/50 shadow-xl">
+                          <div className="flex items-end gap-1 md:gap-1.5 h-8 md:h-10 mb-1 border-b border-slate-700 pb-1 w-full justify-center">
+                            <div className="w-2 md:w-2.5 bg-slate-700 h-[40%] rounded-t-sm"></div>
+                            <div className="w-2 md:w-2.5 bg-slate-600 h-[60%] rounded-t-sm"></div>
+                            <div className="w-2 md:w-2.5 bg-slate-500 h-[80%] rounded-t-sm"></div>
+                            <div className="w-2 md:w-2.5 bg-gradient-to-t from-green-600 to-green-400 h-[100%] rounded-t-sm shadow-[0_0_8px_rgba(34,197,94,0.4)]"></div>
                           </div>
-                          <p className="text-[9px] text-slate-400 text-center font-mono mt-1">PROJEÇÃO 2026</p>
+                          <p className="text-[8px] md:text-[9px] text-slate-400 text-center font-mono mt-1">PROJEÇÃO 2026</p>
                       </div>
                     </div>
 

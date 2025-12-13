@@ -66,9 +66,14 @@ export const Services: React.FC = () => {
 
   // Lógica do Próximo Slide (Loop Infinito)
   const nextSlide = useCallback(() => {
+    // CORREÇÃO: Previne overflow do índice além do ponto de reset.
+    // Se já estivermos no "clone" final (index == services.length), 
+    // aguardamos o useEffect fazer o reset para 0.
+    if (currentIndex >= services.length) return;
+    
     if (!isTransitioning) return;
     setCurrentIndex((prev) => prev + 1);
-  }, [isTransitioning]);
+  }, [isTransitioning, currentIndex]);
 
   const prevSlide = () => {
     if (currentIndex === 0) return;
@@ -188,7 +193,11 @@ export const Services: React.FC = () => {
                 className="flex-shrink-0 px-2 md:px-4 box-border"
                 style={{ width: `${100 / itemsPerPage}%` }}
               >
-                <div className="group relative h-[500px] md:h-[520px] rounded-2xl overflow-hidden cursor-pointer shadow-xl shadow-black/50 border border-slate-800 hover:border-cyan-500/50 transition-all duration-500 hover:-translate-y-2">
+                {/* 
+                   UPDATED CARD HEIGHT:
+                   Changed h-[500px] to h-[420px] on mobile to prevent full-screen occupancy.
+                */}
+                <div className="group relative h-[420px] md:h-[520px] rounded-2xl overflow-hidden cursor-pointer shadow-xl shadow-black/50 border border-slate-800 hover:border-cyan-500/50 transition-all duration-500 hover:-translate-y-2">
                   {/* Image Background */}
                   <img 
                     src={service.image} 
@@ -199,18 +208,18 @@ export const Services: React.FC = () => {
                   {/* Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-95"></div>
                   
-                  {/* Content */}
+                  {/* Content - Adjusted spacing and sizing for mobile */}
                   <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
-                    <div className="mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                      <div className="w-14 h-14 rounded-xl bg-slate-800/80 backdrop-blur-md border border-slate-700 flex items-center justify-center mb-5 group-hover:bg-cyan-500/20 group-hover:border-cyan-500/50 transition-colors">
+                    <div className="mb-2 md:mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                      <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-slate-800/80 backdrop-blur-md border border-slate-700 flex items-center justify-center mb-4 md:mb-5 group-hover:bg-cyan-500/20 group-hover:border-cyan-500/50 transition-colors">
                         {service.icon}
                       </div>
-                      <h4 className="text-2xl md:text-3xl font-bold text-white mb-3">{service.title}</h4>
-                      <p className="text-slate-400 text-base md:text-lg leading-relaxed mb-6 line-clamp-4 group-hover:text-slate-300">
+                      <h4 className="text-xl md:text-3xl font-bold text-white mb-2 md:mb-3">{service.title}</h4>
+                      <p className="text-slate-400 text-sm md:text-lg leading-relaxed mb-4 md:mb-6 line-clamp-3 md:line-clamp-4 group-hover:text-slate-300">
                         {service.description}
                       </p>
                       
-                      <a href="#contact" className="inline-flex items-center text-cyan-400 font-semibold text-sm uppercase tracking-wider group-hover:text-cyan-300 bg-cyan-950/30 py-2 px-4 rounded-full border border-cyan-900/50 hover:bg-cyan-900/50 transition-colors">
+                      <a href="#contact" className="inline-flex items-center text-cyan-400 font-semibold text-xs md:text-sm uppercase tracking-wider group-hover:text-cyan-300 bg-cyan-950/30 py-2 px-4 rounded-full border border-cyan-900/50 hover:bg-cyan-900/50 transition-colors">
                         Explorar Solução <IconArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-2" />
                       </a>
                     </div>
