@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { IconCheck, IconX } from './Icons';
 
-export const Contact: React.FC = () => {
+interface ContactProps {
+  onSuccess: () => void;
+}
+
+export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -11,6 +15,7 @@ export const Contact: React.FC = () => {
   });
 
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Regras de validação
   const validate = (name: string, value: string) => {
@@ -32,7 +37,7 @@ export const Contact: React.FC = () => {
 
   const isFieldValid = (name: string) => validate(name, formData[name as keyof typeof formData]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Verificar se todos os campos obrigatórios são válidos antes de enviar
@@ -53,10 +58,33 @@ export const Contact: React.FC = () => {
       return;
     }
 
-    // Simulate submission
-    alert('Obrigado pelo contato! Nossa equipe retornará em breve.');
-    setFormData({ name: '', email: '', phone: '', message: '', company: '' });
-    setTouched({});
+    setIsSubmitting(true);
+
+    // -----------------------------------------------------------------------
+    // INSTRUÇÕES PARA INTEGRAÇÃO SMTP / BACKEND
+    // -----------------------------------------------------------------------
+    /* 
+    try {
+      // Seu fetch real aqui...
+      const response = await fetch('...', { ... });
+      if (response.ok) {
+          onSuccess(); // REDIRECIONA PARA A PÁGINA DE AGRADECIMENTO
+      }
+    } catch (e) { ... }
+    */
+
+    // --- MODO SIMULAÇÃO (Remova este bloco quando configurar o código acima) ---
+    // Simula um delay de rede
+    setTimeout(() => {
+      console.log("Simulação de Envio SMTP:", formData);
+      setFormData({ name: '', email: '', phone: '', message: '', company: '' });
+      setTouched({});
+      setIsSubmitting(false);
+      
+      // Redireciona para a página de sucesso
+      onSuccess(); 
+    }, 1500);
+    // ---------------------------------------------------------------------------
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -80,11 +108,12 @@ export const Contact: React.FC = () => {
     const isValid = isFieldValid(fieldName);
 
     if (!isTouched && fieldName !== 'company') {
-      return `${baseClasses} border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500`;
+      return `${baseClasses} bg-white border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500`;
     }
 
     if (fieldName === 'company') {
-       return `${baseClasses} border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500`;
+       // Corrigido: Fundo branco explícito e cor de texto
+       return `${baseClasses} bg-white text-slate-900 border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500`;
     }
 
     return isValid
@@ -94,60 +123,22 @@ export const Contact: React.FC = () => {
 
   return (
     <div id="contact" className="bg-slate-900 py-24 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-          <div>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Header Centralizado */}
+        <div className="text-center mb-12">
             <h2 className="text-blue-400 font-semibold tracking-wide uppercase text-sm mb-3">Fale Conosco</h2>
-            <h3 className="text-3xl md:text-4xl font-bold mb-6">Pronto para otimizar sua carga tributária?</h3>
-            <p className="text-slate-300 text-lg mb-10">
-              Preencha o formulário para agendar um diagnóstico gratuito com um de nossos especialistas. Identificaremos oportunidades imediatas para o seu negócio.
+            <h3 className="text-3xl md:text-4xl font-bold mb-4">Pronto para otimizar sua carga tributária?</h3>
+            <p className="text-slate-300 text-lg max-w-2xl mx-auto">
+              Preencha o formulário para agendar um diagnóstico gratuito com um de nossos especialistas.
             </p>
-            
-            <div className="space-y-6">
-              <div className="flex items-start">
-                <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-900 flex items-center justify-center border border-blue-700">
-                  <svg className="h-5 w-5 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
-                </div>
-                <div className="ml-4">
-                  <h4 className="text-lg font-medium">Telefone</h4>
-                  <p className="mt-1 text-slate-300">(44) 98860-1424</p>
-                  <p className="text-sm text-slate-400">Seg-Sex, 9h às 17h</p>
-                </div>
-              </div>
+        </div>
 
-              <div className="flex items-start">
-                <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-900 flex items-center justify-center border border-blue-700">
-                  <svg className="h-5 w-5 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <div className="ml-4">
-                  <h4 className="text-lg font-medium">Email</h4>
-                  <p className="mt-1 text-slate-300">shigueme@shirabe.com.br</p>
-                </div>
-              </div>
-
-              <div className="flex items-start">
-                <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-900 flex items-center justify-center border border-blue-700">
-                  <svg className="h-5 w-5 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                </div>
-                <div className="ml-4">
-                  <h4 className="text-lg font-medium">Escritório</h4>
-                  <p className="mt-1 text-slate-300">Rua de Floresta, 1000 - Conjunto tal<br />Floresta - PR</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-2xl p-8 text-slate-800 shadow-2xl">
-            <h3 className="text-2xl font-bold mb-6">Solicitar Proposta</h3>
-            <form onSubmit={handleSubmit} className="space-y-4" noValidate aria-label="Formulário de contato">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Formulário Centralizado */}
+        <div className="bg-white rounded-2xl p-8 md:p-10 text-slate-800 shadow-2xl border border-slate-800/50">
+            <h3 className="text-2xl font-bold mb-8 text-center text-slate-900">Solicitar Proposta</h3>
+            <form onSubmit={handleSubmit} className="space-y-5" noValidate aria-label="Formulário de contato">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="relative">
                   <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-1">Nome Completo *</label>
                   <div className="relative">
@@ -162,6 +153,7 @@ export const Contact: React.FC = () => {
                         value={formData.name}
                         onChange={handleChange}
                         onBlur={handleBlur}
+                        disabled={isSubmitting}
                         className={getInputClasses('name')}
                         placeholder="Seu nome"
                     />
@@ -183,13 +175,15 @@ export const Contact: React.FC = () => {
                     id="company"
                     value={formData.company}
                     onChange={handleChange}
+                    onBlur={handleBlur}
+                    disabled={isSubmitting}
                     className={getInputClasses('company')}
                     placeholder="Nome da empresa"
                   />
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="relative">
                   <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1">Email Corporativo *</label>
                   <div className="relative">
@@ -204,8 +198,9 @@ export const Contact: React.FC = () => {
                         value={formData.email}
                         onChange={handleChange}
                         onBlur={handleBlur}
+                        disabled={isSubmitting}
                         className={getInputClasses('email')}
-                        placeholder="voce@empresa.com"
+                        placeholder="voce@empresa.com.br"
                     />
                     {touched.email && (
                         <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none" aria-hidden="true">
@@ -231,8 +226,9 @@ export const Contact: React.FC = () => {
                         value={formData.phone}
                         onChange={handleChange}
                         onBlur={handleBlur}
+                        disabled={isSubmitting}
                         className={getInputClasses('phone')}
-                        placeholder="(11) 99999-9999"
+                        placeholder="(99) 99999-9999"
                     />
                     {touched.phone && (
                         <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none" aria-hidden="true">
@@ -260,6 +256,7 @@ export const Contact: React.FC = () => {
                     value={formData.message}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    disabled={isSubmitting}
                     className={getInputClasses('message')}
                     placeholder="Descreva brevemente sua necessidade..."
                     ></textarea>
@@ -276,16 +273,17 @@ export const Contact: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white font-bold py-4 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/50 transition-all shadow-lg hover:shadow-blue-600/30 flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed"
+                disabled={isSubmitting}
+                className="w-full bg-blue-600 text-white font-bold py-4 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/50 transition-all shadow-lg hover:shadow-blue-600/30 flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed text-lg"
               >
-                Enviar Solicitação
+                {isSubmitting ? 'Processando...' : 'Enviar Solicitação'}
               </button>
               <p className="text-xs text-center text-slate-500 mt-4">
                 Seus dados estão protegidos. Não enviamos spam.
               </p>
             </form>
-          </div>
         </div>
+
       </div>
     </div>
   );

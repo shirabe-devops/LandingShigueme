@@ -149,13 +149,14 @@ export const Hero: React.FC = () => {
           </div>
 
           {/* Right Column: Abstract Calculation Orbit System */}
-          <div className={`relative ${baseTransition} delay-[1000ms] ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'} flex items-center justify-center h-[400px] lg:h-[600px] w-full`}>
+          <div className={`relative ${baseTransition} delay-[1000ms] ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'} flex items-center justify-center h-[380px] sm:h-[450px] lg:h-[600px] w-full overflow-visible`}>
              
              {/* 
                  ORBIT SYSTEM CONTAINER 
                  Scaled specifically for responsive devices to ensure the animation fits everywhere.
+                 UPDATED: Mobile scale increased from 0.6 to 0.75 for better visibility.
              */}
-             <div className="relative w-[500px] h-[500px] orbit-system scale-[0.6] sm:scale-[0.8] lg:scale-100 transition-transform duration-500">
+             <div className="relative w-[500px] h-[500px] orbit-system scale-[0.75] sm:scale-[0.9] lg:scale-100 transition-transform duration-500 origin-center">
                 
                 {/* 1. The Center Point (Void/Crosshair) - No Heavy Anchor */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4">

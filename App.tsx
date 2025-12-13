@@ -8,25 +8,25 @@ import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { AIAssistant } from './components/AIAssistant';
 import { PrivacyPolicy } from './components/PrivacyPolicy';
+import { SuccessPage } from './components/SuccessPage';
 
-type Page = 'home' | 'privacy';
+type Page = 'home' | 'privacy' | 'success';
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
 
   const navigateToPrivacy = () => setCurrentPage('privacy');
   const navigateToHome = () => setCurrentPage('home');
+  const navigateToSuccess = () => setCurrentPage('success');
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900 scroll-smooth">
       {/* 
-        A Navbar permanece se estiver na home. 
-        Se estiver na Privacy, podemos optar por não mostrar a navbar completa ou 
-        mostrar uma versão simplificada, mas por simplicidade, 
-        vamos renderizar o conteúdo condicionalmente abaixo.
+        Logica de renderização das páginas.
+        A Navbar e Footer geralmente não aparecem na página de sucesso para focar na conversão/mensagem.
       */}
       
-      {currentPage === 'home' ? (
+      {currentPage === 'home' && (
         <>
           <Navbar />
           <main className="flex-grow">
@@ -34,13 +34,19 @@ function App() {
             <Clients />
             <Services />
             <About />
-            <Contact />
+            <Contact onSuccess={navigateToSuccess} />
           </main>
           <Footer onOpenPrivacy={navigateToPrivacy} />
           <AIAssistant />
         </>
-      ) : (
+      )}
+
+      {currentPage === 'privacy' && (
         <PrivacyPolicy onBack={navigateToHome} />
+      )}
+
+      {currentPage === 'success' && (
+        <SuccessPage onBack={navigateToHome} />
       )}
     </div>
   );

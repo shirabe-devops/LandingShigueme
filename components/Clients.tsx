@@ -13,40 +13,28 @@ const clients = [
 ];
 
 export const Clients: React.FC = () => {
-  // Duplicamos a lista para criar o efeito de loop perfeito no CSS
-  // Precisamos de logos suficientes para preencher a tela + o scroll
-  const displayClients = [...clients, ...clients];
-
   return (
-    <div className="bg-white py-16 border-b border-slate-100 overflow-hidden">
-      <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="bg-white py-16 border-b border-slate-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <p className="text-center text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-12">
           Empresas que confiam na nossa expertise
         </p>
         
-        <div className="relative w-full">
-          {/* Máscaras de gradiente para suavizar as bordas (efeito fade) */}
-          <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
-          <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
-
-          {/* Container do Carrossel Infinito */}
-          <div className="flex overflow-hidden">
-            <div className="flex animate-scroll w-max hover:cursor-grab">
-              {displayClients.map((client, index) => (
-                <div 
-                  key={`${client.name}-${index}`} 
-                  className="flex-shrink-0 px-8 md:px-12 flex items-center justify-center min-w-[150px] md:min-w-[200px]"
-                >
-                  <img 
-                    src={client.logo} 
-                    alt={`Logo ${client.name}`} 
-                    className="h-8 md:h-10 w-auto object-contain opacity-40 grayscale transition-all duration-300 hover:grayscale-0 hover:opacity-100 hover:scale-110" 
-                    loading="lazy"
-                  />
-                </div>
-              ))}
+        {/* Layout em Grid (Lista e Colunas) em vez de Carrossel */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 items-center justify-items-center">
+          {clients.map((client, index) => (
+            <div 
+              key={`${client.name}-${index}`} 
+              className="w-full flex items-center justify-center p-4 grayscale hover:grayscale-0 opacity-50 hover:opacity-100 transition-all duration-300 hover:scale-105"
+            >
+              <img 
+                src={client.logo} 
+                alt={`Logo ${client.name}`} 
+                className="h-8 md:h-10 max-w-[120px] object-contain" 
+                loading="lazy"
+              />
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>

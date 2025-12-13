@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { IconTrendingUp, IconCircleDollar, IconLayers, IconChart, IconChevronLeft, IconChevronRight, IconArrowRight, IconSearch } from './Icons';
+import { IconTrendingUp, IconCircleDollar, IconLayers, IconChart, IconArrowRight } from './Icons';
 import { ServiceItem } from '../types';
 
 const services: ServiceItem[] = [
@@ -38,16 +38,13 @@ export const Services: React.FC = () => {
   const [itemsPerPage, setItemsPerPage] = useState(3);
   const [isPaused, setIsPaused] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
+  
+  // Touch States for Swipe
+  const [touchStart, setTouchStart] = useState<number>(0);
+  const [touchEnd, setTouchEnd] = useState<number>(0);
   
   // Duplicamos a lista para criar o efeito de loop infinito
   const displayServices = [...services, ...services];
-
-  // Filtra serviços baseado na busca
-  const filteredServices = services.filter(service => 
-    service.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    service.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   // Responsive logic strict: 1 for mobile, 2 for tablet, 3 for desktop
   useEffect(() => {
@@ -69,9 +66,9 @@ export const Services: React.FC = () => {
 
   // Lógica do Próximo Slide (Loop Infinito)
   const nextSlide = useCallback(() => {
-    if (!isTransitioning || searchQuery) return; // Pausa carrossel se buscando
+    if (!isTransitioning) return;
     setCurrentIndex((prev) => prev + 1);
-  }, [isTransitioning, searchQuery]);
+  }, [isTransitioning]);
 
   const prevSlide = () => {
     if (currentIndex === 0) return;
@@ -84,8 +81,6 @@ export const Services: React.FC = () => {
 
   // Efeito de "Snap" (Pulo silencioso) para o loop infinito
   useEffect(() => {
-    if (searchQuery) return; // Ignora se estiver buscando
-    
     // Quando atingimos o índice que corresponde ao início do clone
     if (currentIndex === services.length) {
       const timeout = setTimeout(() => {
@@ -95,7 +90,7 @@ export const Services: React.FC = () => {
 
       return () => clearTimeout(timeout);
     }
-  }, [currentIndex, searchQuery]);
+  }, [currentIndex]);
 
   // Religador da transição após o snap
   useEffect(() => {
@@ -109,12 +104,43 @@ export const Services: React.FC = () => {
 
   // Auto-play Logic
   useEffect(() => {
-    if (isPaused || searchQuery) return;
+    if (isPaused) return;
     const interval = setInterval(() => {
       nextSlide();
     }, 5000);
     return () => clearInterval(interval);
-  }, [isPaused, nextSlide, searchQuery]);
+  }, [isPaused, nextSlide]);
+
+  // --- Touch / Swipe Handlers ---
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+    setIsPaused(true); // Pause auto-play on touch
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const minSwipeDistance = 50;
+    
+    // Swipe Left (Show Next)
+    if (distance > minSwipeDistance) {
+      nextSlide();
+    } 
+    // Swipe Right (Show Prev)
+    else if (distance < -minSwipeDistance) {
+      prevSlide();
+    }
+    
+    // Reset values
+    setTouchStart(0);
+    setTouchEnd(0);
+    setIsPaused(false); // Resume auto-play
+  };
 
   return (
     <div id="services" className="bg-slate-950 py-24 relative overflow-hidden">
@@ -125,7 +151,7 @@ export const Services: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-8 gap-6">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
           <div className="max-w-2xl">
             <h2 className="text-cyan-400 font-semibold tracking-widest uppercase text-xs mb-3 flex items-center gap-2">
               <span className="w-8 h-[1px] bg-cyan-400"></span>
@@ -138,168 +164,81 @@ export const Services: React.FC = () => {
               Tecnologia de ponta aplicada à inteligência tributária para navegar a nova era econômica.
             </p>
           </div>
-          
-          {/* Controls - Hide if searching */}
-          {!searchQuery && (
-            <div className="flex gap-3 hidden md:flex">
-              <button 
-                onClick={prevSlide}
-                className="p-3 rounded-full border border-slate-700 bg-slate-900/50 text-white hover:bg-cyan-500 hover:border-cyan-500 hover:text-white transition-all duration-300 backdrop-blur-sm group"
-                aria-label="Anterior"
-              >
-                <IconChevronLeft className="w-6 h-6 group-hover:-translate-x-1 transition-transform" />
-              </button>
-              <button 
-                onClick={nextSlide}
-                className="p-3 rounded-full border border-slate-700 bg-slate-900/50 text-white hover:bg-cyan-500 hover:border-cyan-500 hover:text-white transition-all duration-300 backdrop-blur-sm group"
-                aria-label="Próximo"
-              >
-                <IconChevronRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
-          )}
         </div>
 
-        {/* Search Bar */}
-        <div className="max-w-md mb-12 relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <IconSearch className="h-5 w-5 text-slate-500" />
-          </div>
-          <input
-            type="text"
-            className="block w-full pl-10 pr-3 py-3 border border-slate-700 rounded-lg leading-5 bg-slate-900/50 text-slate-300 placeholder-slate-500 focus:outline-none focus:bg-slate-900 focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm transition-colors backdrop-blur-sm"
-            placeholder="Buscar por serviços ou palavras-chave..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-
-        {/* Conditional Rendering: Search Results vs Carousel */}
-        {searchQuery ? (
-          // Search Results Grid
-          <div className="min-h-[400px]">
-            {filteredServices.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-[fadeIn_0.5s_ease-out]">
-                {filteredServices.map((service, index) => (
-                   <div key={`${service.id}-${index}`} className="group relative h-[400px] rounded-2xl overflow-hidden cursor-pointer shadow-xl shadow-black/50 border border-slate-800 hover:border-cyan-500/50 transition-all duration-500 hover:-translate-y-2">
-                    {/* Image Background */}
-                    <img 
-                      src={service.image} 
-                      alt={service.title} 
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    
-                    {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-95"></div>
-                    
-                    {/* Content */}
-                    <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                      <div className="mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                        <div className="w-12 h-12 rounded-xl bg-slate-800/80 backdrop-blur-md border border-slate-700 flex items-center justify-center mb-4 group-hover:bg-cyan-500/20 group-hover:border-cyan-500/50 transition-colors">
-                          {service.icon}
-                        </div>
-                        <h4 className="text-xl font-bold text-white mb-2">{service.title}</h4>
-                        <p className="text-slate-400 text-sm leading-relaxed mb-4 line-clamp-4 group-hover:text-slate-300">
-                          {service.description}
-                        </p>
-                        
-                        <a href="#contact" className="inline-flex items-center text-cyan-400 font-semibold text-xs uppercase tracking-wider group-hover:text-cyan-300 bg-cyan-950/30 py-2 px-3 rounded-full border border-cyan-900/50 hover:bg-cyan-900/50 transition-colors">
-                          Explorar <IconArrowRight className="ml-2 w-3 h-3 transition-transform group-hover:translate-x-2" />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center h-64 text-slate-500">
-                <IconSearch className="w-12 h-12 mb-4 opacity-20" />
-                <p className="text-lg">Nenhum serviço encontrado para "{searchQuery}"</p>
-                <button 
-                  onClick={() => setSearchQuery('')}
-                  className="mt-4 text-cyan-400 hover:text-cyan-300 text-sm font-semibold"
-                >
-                  Limpar busca
-                </button>
-              </div>
-            )}
-          </div>
-        ) : (
-          // Default Carousel View
-          <>
-            <div 
-              className="overflow-hidden py-4 w-full"
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
-              onTouchStart={() => setIsPaused(true)}
-              onTouchEnd={() => setIsPaused(false)}
-            >
+        {/* Default Carousel View (Search Removed) */}
+        <div 
+          className="overflow-hidden py-4 w-full touch-pan-y"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div 
+            className="flex w-full"
+            style={{ 
+              transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)`,
+              transition: isTransitioning ? 'transform 700ms cubic-bezier(0.25, 1, 0.5, 1)' : 'none'
+            }}
+          >
+            {displayServices.map((service, index) => (
               <div 
-                className="flex w-full"
-                style={{ 
-                  transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)`,
-                  transition: isTransitioning ? 'transform 700ms cubic-bezier(0.25, 1, 0.5, 1)' : 'none'
-                }}
+                key={`${service.id}-${index}`} 
+                className="flex-shrink-0 px-2 md:px-4 box-border"
+                style={{ width: `${100 / itemsPerPage}%` }}
               >
-                {displayServices.map((service, index) => (
-                  <div 
-                    key={`${service.id}-${index}`} 
-                    className="flex-shrink-0 px-2 md:px-4 box-border"
-                    style={{ width: `${100 / itemsPerPage}%` }}
-                  >
-                    <div className="group relative h-[500px] md:h-[520px] rounded-2xl overflow-hidden cursor-pointer shadow-xl shadow-black/50 border border-slate-800 hover:border-cyan-500/50 transition-all duration-500 hover:-translate-y-2">
-                      {/* Image Background */}
-                      <img 
-                        src={service.image} 
-                        alt={service.title} 
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      
-                      {/* Gradient Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-95"></div>
-                      
-                      {/* Content */}
-                      <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
-                        <div className="mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                          <div className="w-14 h-14 rounded-xl bg-slate-800/80 backdrop-blur-md border border-slate-700 flex items-center justify-center mb-5 group-hover:bg-cyan-500/20 group-hover:border-cyan-500/50 transition-colors">
-                            {service.icon}
-                          </div>
-                          <h4 className="text-2xl md:text-3xl font-bold text-white mb-3">{service.title}</h4>
-                          <p className="text-slate-400 text-base md:text-lg leading-relaxed mb-6 line-clamp-4 group-hover:text-slate-300">
-                            {service.description}
-                          </p>
-                          
-                          <a href="#contact" className="inline-flex items-center text-cyan-400 font-semibold text-sm uppercase tracking-wider group-hover:text-cyan-300 bg-cyan-950/30 py-2 px-4 rounded-full border border-cyan-900/50 hover:bg-cyan-900/50 transition-colors">
-                            Explorar Solução <IconArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-2" />
-                          </a>
-                        </div>
+                <div className="group relative h-[500px] md:h-[520px] rounded-2xl overflow-hidden cursor-pointer shadow-xl shadow-black/50 border border-slate-800 hover:border-cyan-500/50 transition-all duration-500 hover:-translate-y-2">
+                  {/* Image Background */}
+                  <img 
+                    src={service.image} 
+                    alt={service.title} 
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-95"></div>
+                  
+                  {/* Content */}
+                  <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
+                    <div className="mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                      <div className="w-14 h-14 rounded-xl bg-slate-800/80 backdrop-blur-md border border-slate-700 flex items-center justify-center mb-5 group-hover:bg-cyan-500/20 group-hover:border-cyan-500/50 transition-colors">
+                        {service.icon}
                       </div>
+                      <h4 className="text-2xl md:text-3xl font-bold text-white mb-3">{service.title}</h4>
+                      <p className="text-slate-400 text-base md:text-lg leading-relaxed mb-6 line-clamp-4 group-hover:text-slate-300">
+                        {service.description}
+                      </p>
                       
-                      {/* Hover Glow Effect */}
-                      <div className="absolute inset-0 border-2 border-cyan-500/0 rounded-2xl group-hover:border-cyan-500/20 pointer-events-none transition-all duration-200"></div>
+                      <a href="#contact" className="inline-flex items-center text-cyan-400 font-semibold text-sm uppercase tracking-wider group-hover:text-cyan-300 bg-cyan-950/30 py-2 px-4 rounded-full border border-cyan-900/50 hover:bg-cyan-900/50 transition-colors">
+                        Explorar Solução <IconArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-2" />
+                      </a>
                     </div>
                   </div>
-                ))}
+                  
+                  {/* Hover Glow Effect */}
+                  <div className="absolute inset-0 border-2 border-cyan-500/0 rounded-2xl group-hover:border-cyan-500/20 pointer-events-none transition-all duration-200"></div>
+                </div>
               </div>
-            </div>
+            ))}
+          </div>
+        </div>
 
-            {/* Progress Bar / Dots */}
-            <div className="flex justify-center mt-10 gap-3">
-                {services.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => goToSlide(idx)}
-                    className={`h-1.5 transition-all duration-500 rounded-full ${
-                      (currentIndex % services.length) === idx 
-                        ? 'w-10 bg-cyan-500' 
-                        : 'w-3 bg-slate-700 hover:bg-slate-600'
-                    }`}
-                    aria-label={`Ir para o slide ${idx + 1}`}
-                  />
-                ))}
-            </div>
-          </>
-        )}
+        {/* Progress Bar / Dots */}
+        <div className="flex justify-center mt-10 gap-3">
+            {services.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => goToSlide(idx)}
+                className={`h-1.5 transition-all duration-500 rounded-full ${
+                  (currentIndex % services.length) === idx 
+                    ? 'w-10 bg-cyan-500' 
+                    : 'w-3 bg-slate-700 hover:bg-slate-600'
+                }`}
+                aria-label={`Ir para o slide ${idx + 1}`}
+              />
+            ))}
+        </div>
 
         {/* --- CHART SECTION (Dark Mode Integration) --- */}
         <div className="mt-32 pt-16 border-t border-slate-800/50">
