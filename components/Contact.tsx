@@ -74,31 +74,8 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
     // 1. URL DO WEBHOOK N8N
     // Insira abaixo a URL do seu workflow "Production" do N8N.
     // O N8N deverá ter um nó "Webhook" (POST) conectado a um nó "Email" (Gmail/SMTP).
-    const N8N_WEBHOOK_URL = "https://n8n.shirabe.com.br/webhook-test/lpshigueme"; 
+    const N8N_WEBHOOK_URL = "https://n8nweebhook.shirabe.com.br/webhook/lpshigueme"; 
 
-    /* 
-       =================================================================================
-       2. CONFIGURAÇÃO MANUAL DE SERVIDOR SMTP (PREENCHIMENTO POSTERIOR)
-       =================================================================================
-       Caso opte por não usar o N8N e decida implementar um backend próprio ou Server Action,
-       utilize as configurações abaixo como referência.
-       
-       ATENÇÃO: Nunca exponha senhas de e-mail diretamente neste arquivo (Frontend).
-       Estas configurações devem ser usadas apenas no seu Backend/API ou no nó do N8N.
-
-       const smtpConfig = {
-          host: "smtp.office365.com",      // Ex: smtp.gmail.com
-          port: 587,                       // Geralmente 587 (TLS) ou 465 (SSL)
-          secure: false,                   // true para 465, false para outras portas
-          auth: {
-             user: "contato@shigueme.com.br", // Seu e-mail de envio
-             pass: "SUA_SENHA_SEGURA_AQUI"    // Senha ou App Password
-          },
-          from: "Site Shigueme <contato@shigueme.com.br>",
-          to: "comercial@shigueme.com.br"
-       };
-       =================================================================================
-    */
 
     try {
       // Preparando o Payload (JSON) organizado para o N8N
