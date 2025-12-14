@@ -171,7 +171,7 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
         </div>
 
         <div className="bg-white rounded-2xl p-8 md:p-10 text-slate-800 shadow-2xl border border-slate-800/50">
-            <h3 className="text-2xl font-bold mb-8 text-center text-slate-900">Perfil Empresarial & Contato</h3>
+            <h3 className="text-2xl font-bold mb-8 text-center text-slate-900">Perfil Empresarial</h3>
             <form onSubmit={handleSubmit} className="space-y-6" noValidate aria-label="Formulário de qualificação tributária">
               
               {/* BLOCO 1: Identificação Básica */}
