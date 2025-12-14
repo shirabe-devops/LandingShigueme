@@ -67,17 +67,86 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
 
     setIsSubmitting(true);
 
-    // Simulação de envio para API / CRM
-    setTimeout(() => {
-      console.log("Lead Qualificado Enviado:", formData);
+    // =================================================================================
+    // CONFIGURAÇÃO DE ENVIO DE DADOS (WEBHOOK N8N)
+    // =================================================================================
+    
+    // 1. URL DO WEBHOOK N8N
+    // Insira abaixo a URL do seu workflow "Production" do N8N.
+    // O N8N deverá ter um nó "Webhook" (POST) conectado a um nó "Email" (Gmail/SMTP).
+    const N8N_WEBHOOK_URL = "https://n8n.shirabe.com.br/webhook-test/lpshigueme"; 
+
+    /* 
+       =================================================================================
+       2. CONFIGURAÇÃO MANUAL DE SERVIDOR SMTP (PREENCHIMENTO POSTERIOR)
+       =================================================================================
+       Caso opte por não usar o N8N e decida implementar um backend próprio ou Server Action,
+       utilize as configurações abaixo como referência.
+       
+       ATENÇÃO: Nunca exponha senhas de e-mail diretamente neste arquivo (Frontend).
+       Estas configurações devem ser usadas apenas no seu Backend/API ou no nó do N8N.
+
+       const smtpConfig = {
+          host: "smtp.office365.com",      // Ex: smtp.gmail.com
+          port: 587,                       // Geralmente 587 (TLS) ou 465 (SSL)
+          secure: false,                   // true para 465, false para outras portas
+          auth: {
+             user: "contato@shigueme.com.br", // Seu e-mail de envio
+             pass: "SUA_SENHA_SEGURA_AQUI"    // Senha ou App Password
+          },
+          from: "Site Shigueme <contato@shigueme.com.br>",
+          to: "comercial@shigueme.com.br"
+       };
+       =================================================================================
+    */
+
+    try {
+      // Preparando o Payload (JSON) organizado para o N8N
+      const payload = {
+        data_envio: new Date().toLocaleString('pt-BR'),
+        origem: 'Formulário Site - Shigueme',
+        contato: {
+          nome: formData.name,
+          email: formData.email,
+          telefone: formData.phone,
+          empresa: formData.company || 'Não informada'
+        },
+        qualificacao_lead: {
+          faturamento_estimado: formData.revenue,
+          regime_tributario: formData.regime,
+          setor_atuacao: formData.sector,
+          necessidade_principal: formData.mainNeed
+        },
+        mensagem: formData.message
+      };
+
+      // Descomente a linha abaixo quando tiver a URL do N8N configurada
+      const response = await fetch(N8N_WEBHOOK_URL, {
+         method: 'POST',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify(payload)
+       });
+
+       if (!response.ok) throw new Error('Erro na comunicação com N8N');
+
+      // --- MODO SIMULAÇÃO (Remover quando configurar o N8N acima) ---
+      console.log("PAYLOAD PRONTO PARA N8N:", payload);
+      await new Promise(resolve => setTimeout(resolve, 1500)); 
+      // -----------------------------------------------------------
+
       setFormData({ 
         name: '', email: '', phone: '', company: '', message: '',
         revenue: '', regime: '', sector: '', mainNeed: ''
       });
       setTouched({});
+      onSuccess();
+
+    } catch (error) {
+      console.error("Erro ao enviar formulário:", error);
+      alert("Houve uma falha ao enviar seus dados. Por favor, tente novamente ou entre em contato via WhatsApp.");
+    } finally {
       setIsSubmitting(false);
-      onSuccess(); 
-    }, 1500);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
