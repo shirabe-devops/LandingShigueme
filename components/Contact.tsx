@@ -250,7 +250,7 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
                         onBlur={handleBlur}
                         disabled={isSubmitting}
                         className={getInputClasses('phone')}
-                        placeholder="(DDD) 99999-9999"
+                        placeholder="(DD) 99999-9999"
                     />
                     {touched.phone && (
                         <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -280,8 +280,8 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
                                 className={getInputClasses('revenue')}
                             >
                                 <option value="">Selecione uma opção</option>
-                                <option value="ate_50k">Até R$ 50 mil (MEI/Micro)</option>
-                                <option value="50k_300k">R$ 50 mil a R$ 300 mil</option>
+                                <option value="ate_50k">Até R$ 80 mil (MEI/Micro)</option>
+                                <option value="50k_300k">R$ 80 mil a R$ 300 mil</option>
                                 <option value="300k_1m">R$ 300 mil a R$ 1 Milhão</option>
                                 <option value="1m_5m">R$ 1 Milhão a R$ 5 Milhões</option>
                                 <option value="acima_5m">Acima de R$ 5 Milhões</option>
