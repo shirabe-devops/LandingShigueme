@@ -74,7 +74,7 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
     // 1. URL DO WEBHOOK N8N
     // Insira abaixo a URL do seu workflow "Production" do N8N.
     // O N8N deverá ter um nó "Webhook" (POST) conectado a um nó "Email" (Gmail/SMTP).
-    const N8N_WEBHOOK_URL = "https://n8nweebhook.shirabe.com.br/webhook/lpshigueme"; 
+    const N8N_WEBHOOK_URL = "https://n8n.shirabe.com.br/webhook-test/lpshigueme"; 
 
 
     try {
