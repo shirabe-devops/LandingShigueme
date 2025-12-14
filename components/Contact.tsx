@@ -71,9 +71,11 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
     // CONFIGURAÇÃO DE ENVIO DE DADOS (WEBHOOK N8N)
     // =================================================================================
     
-    // ATUALIZAÇÃO CORS: Utilizamos um proxy local (/api/webhook) configurado no vercel.json
-    // Isso evita bloqueios de navegador ao enviar dados para servidores externos.
-    const N8N_WEBHOOK_URL = "/api/webhookhttps://n8nwebhook.shirabe.com.br/webhook/lpshigueme"; 
+    // 1. URL DO WEBHOOK N8N
+    // Insira abaixo a URL do seu workflow "Production" do N8N.
+    // O N8N deverá ter um nó "Webhook" (POST) conectado a um nó "Email" (Gmail/SMTP).
+    const N8N_WEBHOOK_URL = "https://n8nwebhook.shirabe.com.br/webhook/lpshigueme"; 
+
 
     try {
       // Preparando o Payload (JSON) organizado para o N8N
@@ -95,20 +97,14 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
         mensagem: formData.message
       };
 
+      // Descomente a linha abaixo quando tiver a URL do N8N configurada
       const response = await fetch(N8N_WEBHOOK_URL, {
          method: 'POST',
-         headers: { 
-           'Content-Type': 'application/json',
-           'Accept': 'application/json'
-         },
+         headers: { 'Content-Type': 'application/json' },
          body: JSON.stringify(payload)
        });
 
-       if (!response.ok) {
-         // Log detalhado para debug se falhar mesmo com proxy
-         console.error('Status da resposta:', response.status, response.statusText);
-         throw new Error(`Erro HTTP: ${response.status}`);
-       }
+       if (!response.ok) throw new Error('Erro na comunicação com N8N');
 
       setFormData({ 
         name: '', email: '', phone: '', company: '', message: '',
@@ -118,8 +114,8 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
       onSuccess();
 
     } catch (error) {
-      console.error("Erro CRÍTICO ao enviar formulário:", error);
-      alert("Houve uma falha técnica ao conectar com o servidor. Se o erro persistir, chame no WhatsApp.");
+      console.error("Erro ao enviar formulário:", error);
+      alert("Houve uma falha ao enviar seus dados. Por favor, tente novamente ou entre em contato via WhatsApp.");
     } finally {
       setIsSubmitting(false);
     }
