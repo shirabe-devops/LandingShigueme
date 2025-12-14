@@ -74,7 +74,7 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
     // 1. URL DO WEBHOOK N8N
     // Insira abaixo a URL do seu workflow "Production" do N8N.
     // O N8N deverá ter um nó "Webhook" (POST) conectado a um nó "Email" (Gmail/SMTP).
-    const N8N_WEBHOOK_URL = "https://n8n.shirabe.com.br/webhook-test/lpshigueme"; 
+    const N8N_WEBHOOK_URL = "https://n8nweebhook.shirabe.com.br/webhook/lpshigueme"; 
 
 
     try {
@@ -107,8 +107,8 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
        if (!response.ok) throw new Error('Erro na comunicação com N8N');
 
       // --- MODO SIMULAÇÃO (Remover quando configurar o N8N acima) ---
-      console.log("PAYLOAD PRONTO PARA N8N:", payload);
-      await new Promise(resolve => setTimeout(resolve, 1500)); 
+      //console.log("PAYLOAD PRONTO PARA N8N:", payload);
+      //await new Promise(resolve => setTimeout(resolve, 1500)); 
       // -----------------------------------------------------------
 
       setFormData({ 
@@ -228,7 +228,7 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
                         onBlur={handleBlur}
                         disabled={isSubmitting}
                         className={getInputClasses('email')}
-                        placeholder="voce@empresa.com.br"
+                        placeholder="voce@suaempresa.com.br"
                     />
                     {touched.email && (
                         <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
