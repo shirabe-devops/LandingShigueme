@@ -68,14 +68,12 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
     setIsSubmitting(true);
 
     // =================================================================================
-    // CONFIGURAÇÃO DE ENVIO DE DADOS (WEBHOOK N8N)
+    // CONFIGURAÇÃO DE ENVIO PARA HOSTINGER (VIA PROXY PHP)
     // =================================================================================
     
-    // 1. URL DO WEBHOOK N8N
-    // Insira abaixo a URL do seu workflow "Production" do N8N.
-    // O N8N deverá ter um nó "Webhook" (POST) conectado a um nó "Email" (Gmail/SMTP).
-    const N8N_WEBHOOK_URL = "https://n8nwebhook.shirabe.com.br/webhook/lpshigueme"; 
-
+    // Utilizamos um arquivo PHP local para evitar erros de CORS (Bloqueio do Navegador)
+    // O React envia para o PHP -> O PHP envia para o N8N
+    const WEBHOOK_URL = "/send-email.php"; 
 
     try {
       // Preparando o Payload (JSON) organizado para o N8N
@@ -97,14 +95,21 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
         mensagem: formData.message
       };
 
-      // Descomente a linha abaixo quando tiver a URL do N8N configurada
-      const response = await fetch(N8N_WEBHOOK_URL, {
+      const response = await fetch(WEBHOOK_URL, {
          method: 'POST',
-         headers: { 'Content-Type': 'application/json' },
+         headers: { 
+           'Content-Type': 'application/json',
+           'Accept': 'application/json'
+         },
          body: JSON.stringify(payload)
        });
 
-       if (!response.ok) throw new Error('Erro na comunicação com N8N');
+       // Se o PHP retornar erro (ou 404/500), lançamos erro
+       if (!response.ok) {
+          const errorText = await response.text();
+          console.error("Erro do servidor:", errorText);
+          throw new Error(`Erro no envio: ${response.status}`);
+       }
 
       setFormData({ 
         name: '', email: '', phone: '', company: '', message: '',
@@ -114,8 +119,8 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
       onSuccess();
 
     } catch (error) {
-      console.error("Erro ao enviar formulário:", error);
-      alert("Houve uma falha ao enviar seus dados. Por favor, tente novamente ou entre em contato via WhatsApp.");
+      console.error("Erro CRÍTICO ao enviar formulário:", error);
+      alert("Houve uma falha técnica ao enviar seus dados. Por favor, tente novamente ou entre em contato pelo WhatsApp.");
     } finally {
       setIsSubmitting(false);
     }
@@ -166,7 +171,7 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
         </div>
 
         <div className="bg-white rounded-2xl p-8 md:p-10 text-slate-800 shadow-2xl border border-slate-800/50">
-            <h3 className="text-2xl font-bold mb-8 text-center text-slate-900">Perfil Empresarial</h3>
+            <h3 className="text-2xl font-bold mb-8 text-center text-slate-900">Perfil Empresarial & Contato</h3>
             <form onSubmit={handleSubmit} className="space-y-6" noValidate aria-label="Formulário de qualificação tributária">
               
               {/* BLOCO 1: Identificação Básica */}
