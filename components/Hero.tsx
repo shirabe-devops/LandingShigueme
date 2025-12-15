@@ -9,6 +9,10 @@ export const Hero: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  const openChat = () => {
+    window.dispatchEvent(new CustomEvent('open-chat'));
+  };
+
   // Dados Estruturados (Schema Markup)
   const schemaData = {
     "@context": "https://schema.org",
@@ -32,15 +36,15 @@ export const Hero: React.FC = () => {
   // Shared Button Component to avoid code duplication in render
   const ActionButtons = ({ className }: { className?: string }) => (
     <div className={`${baseTransition} delay-[600ms] ${isVisible ? visibleState : hiddenState} ${className}`}>
-      <a 
-        href="#contact" 
+      <button 
+        onClick={openChat}
         className="group relative w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold text-lg rounded-xl shadow-[0_0_30px_rgba(37,99,235,0.3)] hover:shadow-[0_0_50px_rgba(37,99,235,0.5)] transition-all overflow-hidden border border-blue-400/20 text-center"
       >
         <span className="relative z-10 flex items-center justify-center">
           Agendar Diagnóstico
         </span>
         <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
-      </a>
+      </button>
       
       <a 
         href="#services" 

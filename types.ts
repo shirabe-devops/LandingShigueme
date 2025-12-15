@@ -17,7 +17,30 @@ export interface Testimonial {
   avatar: string;
 }
 
+// Tipos atualizados para o Chatbot
+export interface ChatOption {
+  label: string;
+  value: string;
+}
+
 export interface ChatMessage {
-  role: 'user' | 'model';
-  text: string;
+  id: string;
+  role: 'bot' | 'user';
+  content: string | React.ReactNode;
+  type?: 'text' | 'options' | 'input';
+  options?: ChatOption[];
+  inputType?: 'text' | 'email' | 'tel';
+  isTyping?: boolean;
+}
+
+export interface UserData {
+  name: string;
+  email: string;
+  phone: string;
+  company: string;
+  revenue: string;
+  regime: string;
+  sector: string;
+  mainNeed: string;
+  message: string;
 }

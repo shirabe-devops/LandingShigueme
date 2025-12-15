@@ -46,6 +46,10 @@ export const Services: React.FC = () => {
   // Duplicamos a lista para criar o efeito de loop infinito
   const displayServices = [...services, ...services];
 
+  const openChat = () => {
+    window.dispatchEvent(new CustomEvent('open-chat'));
+  };
+
   // Responsive logic strict: 1 for mobile, 2 for tablet, 3 for desktop
   useEffect(() => {
     const handleResize = () => {
@@ -219,9 +223,9 @@ export const Services: React.FC = () => {
                         {service.description}
                       </p>
                       
-                      <a href="#contact" className="inline-flex items-center text-cyan-400 font-semibold text-xs md:text-sm uppercase tracking-wider group-hover:text-cyan-300 bg-cyan-950/30 py-2 px-4 rounded-full border border-cyan-900/50 hover:bg-cyan-900/50 transition-colors">
+                      <button onClick={openChat} className="inline-flex items-center text-cyan-400 font-semibold text-xs md:text-sm uppercase tracking-wider group-hover:text-cyan-300 bg-cyan-950/30 py-2 px-4 rounded-full border border-cyan-900/50 hover:bg-cyan-900/50 transition-colors">
                         Explorar Solução <IconArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-2" />
-                      </a>
+                      </button>
                     </div>
                   </div>
                   

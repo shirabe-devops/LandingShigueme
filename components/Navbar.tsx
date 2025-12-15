@@ -4,6 +4,12 @@ import { IconMenu, IconX } from './Icons';
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
+  // Função para abrir o chat flutuante
+  const openChat = () => {
+    window.dispatchEvent(new CustomEvent('open-chat'));
+    setIsOpen(false);
+  };
+
   return (
     <nav className="fixed w-full z-50 bg-slate-950/60 backdrop-blur-xl border-b border-white/10 shadow-lg transition-all duration-300 supports-[backdrop-filter]:bg-slate-950/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -27,9 +33,12 @@ export const Navbar: React.FC = () => {
             <a href="#about" className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200">Sobre Nós</a>
             
             <div className="pl-4">
-              <a href="#contact" className="px-5 py-2.5 rounded-full bg-blue-600 text-white font-medium hover:bg-blue-500 transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)] hover:shadow-[0_0_20px_rgba(37,99,235,0.5)] border border-blue-500/50">
+              <button 
+                onClick={openChat}
+                className="px-5 py-2.5 rounded-full bg-blue-600 text-white font-medium hover:bg-blue-500 transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)] hover:shadow-[0_0_20px_rgba(37,99,235,0.5)] border border-blue-500/50"
+              >
                 Fale Conosco
-              </a>
+              </button>
             </div>
           </div>
 
@@ -76,13 +85,12 @@ export const Navbar: React.FC = () => {
             Sobre Nós
           </a>
           <div className="pt-4 mt-2 border-t border-white/10">
-            <a 
-              href="#contact" 
-              onClick={() => setIsOpen(false)} 
+            <button 
+              onClick={openChat} 
               className="block w-full text-center px-5 py-4 rounded-lg bg-blue-600 text-white font-bold hover:bg-blue-500 transition-transform active:scale-95 shadow-lg shadow-blue-900/50"
             >
               Fale Conosco
-            </a>
+            </button>
           </div>
         </div>
       </div>
