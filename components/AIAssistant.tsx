@@ -224,21 +224,31 @@ export const AIAssistant: React.FC = () => {
     addBotMessage("Enviando seus dados...", 500);
 
     try {
+        // Envia para o proxy PHP que deve estar na pasta public/api do build
+        // Nota: Em ambiente de desenvolvimento local (Vite), o PHP não é processado.
+        // Você precisa testar isso no servidor Hostinger ou configurar um proxy local.
         const response = await fetch('/api/n8n-proxy.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
         });
 
-        if (!response.ok) throw new Error('Network error');
+        // Tenta ler o JSON de resposta
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || 'Erro na conexão com o servidor');
+        }
 
         setCurrentStep('SUCCESS');
-        addBotMessage("✅ Recebido! Um consultor entrará em contato.", 1000);
+        addBotMessage("✅ Recebido! Nossos especialistas receberam seu diagnóstico.", 1000);
+        addBotMessage("Entraremos em contato em breve pelo WhatsApp.", 2000);
         
     } catch (error) {
         console.error("Erro envio chat:", error);
         setCurrentStep('ERROR');
-        addBotMessage("Erro ao conectar. Tente novamente mais tarde.", 1000);
+        addBotMessage("Ops! Houve um erro de conexão.", 1000);
+        addBotMessage("Por favor, tente novamente ou chame no WhatsApp.", 2000);
     }
   };
 
