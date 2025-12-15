@@ -68,34 +68,39 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
     setIsSubmitting(true);
 
     // =================================================================================
-    // CONFIGURAÇÃO DE ENVIO PARA HOSTINGER (VIA PROXY PHP)
+    // CONFIGURAÇÃO DE ENVIO VIA FORMSUBMIT (SEM BACKEND PHP)
     // =================================================================================
+    // O FormSubmit lida com o envio de e-mail e resolve problemas de CORS automaticamente.
+    // O e-mail de destino foi extraído da página de sucesso: shigueme@shirabe.com.br
     
-    // Utilizamos um arquivo PHP local para evitar erros de CORS (Bloqueio do Navegador)
-    // O React envia para o PHP -> O PHP envia para o N8N
-    const WEBHOOK_URL = "/send-email.php"; 
+    const DESTINATION_EMAIL = "administrativo@shirabe.com.br"; 
+    const API_URL = `https://formsubmit.co/ajax/${DESTINATION_EMAIL}`;
 
     try {
-      // Preparando o Payload (JSON) organizado para o N8N
+      // Payload formatado para leitura fácil no e-mail
       const payload = {
-        data_envio: new Date().toLocaleString('pt-BR'),
-        origem: 'Formulário Site - Shigueme',
-        contato: {
-          nome: formData.name,
-          email: formData.email,
-          telefone: formData.phone,
-          empresa: formData.company || 'Não informada'
-        },
-        qualificacao_lead: {
-          faturamento_estimado: formData.revenue,
-          regime_tributario: formData.regime,
-          setor_atuacao: formData.sector,
-          necessidade_principal: formData.mainNeed
-        },
-        mensagem: formData.message
+        _subject: `Novo Lead: ${formData.name} - Shigueme Consultoria`,
+        _template: "table", // Formata o e-mail como uma tabela bonita
+        _captcha: "false",  // Desativa o captcha visual (opcional)
+        
+        // Dados do Lead
+        "Nome Completo": formData.name,
+        "Email": formData.email,
+        "Telefone/WhatsApp": formData.phone,
+        "Empresa": formData.company || 'Não informada',
+        
+        // Qualificação
+        "Faturamento Estimado": formatRevenue(formData.revenue),
+        "Regime Tributário": formatRegime(formData.regime),
+        "Setor de Atuação": formatSector(formData.sector),
+        "Necessidade Principal": formatNeed(formData.mainNeed),
+        
+        // Mensagem
+        "Mensagem Detalhada": formData.message,
+        "Data do Envio": new Date().toLocaleString('pt-BR')
       };
 
-      const response = await fetch(WEBHOOK_URL, {
+      const response = await fetch(API_URL, {
          method: 'POST',
          headers: { 
            'Content-Type': 'application/json',
@@ -104,10 +109,7 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
          body: JSON.stringify(payload)
        });
 
-       // Se o PHP retornar erro (ou 404/500), lançamos erro
        if (!response.ok) {
-          const errorText = await response.text();
-          console.error("Erro do servidor:", errorText);
           throw new Error(`Erro no envio: ${response.status}`);
        }
 
@@ -119,11 +121,59 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
       onSuccess();
 
     } catch (error) {
-      console.error("Erro CRÍTICO ao enviar formulário:", error);
+      console.error("Erro ao enviar formulário:", error);
       alert("Houve uma falha técnica ao enviar seus dados. Por favor, tente novamente ou entre em contato pelo WhatsApp.");
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  // Helpers para formatar os valores do select para o e-mail ficar legível
+  const formatRevenue = (val: string) => {
+    const map: Record<string, string> = {
+        'ate_50k': 'Até R$ 80 mil (MEI/Micro)',
+        '50k_300k': 'R$ 80 mil a R$ 300 mil',
+        '300k_1m': 'R$ 300 mil a R$ 1 Milhão',
+        '1m_5m': 'R$ 1 Milhão a R$ 5 Milhões',
+        'acima_5m': 'Acima de R$ 5 Milhões'
+    };
+    return map[val] || val;
+  };
+
+  const formatRegime = (val: string) => {
+      const map: Record<string, string> = {
+          'simples': 'Simples Nacional',
+          'presumido': 'Lucro Presumido',
+          'real': 'Lucro Real',
+          'nao_sei': 'Não sei / Em abertura'
+      };
+      return map[val] || val;
+  };
+
+  const formatSector = (val: string) => {
+      const map: Record<string, string> = {
+          'industria': 'Indústria',
+          'comercio': 'Comércio / Varejo',
+          'servicos': 'Serviços',
+          'agro': 'Agronegócio',
+          'transporte': 'Transporte / Logística',
+          'saude': 'Saúde',
+          'outro': 'Outro'
+      };
+      return map[val] || val;
+  };
+
+  const formatNeed = (val: string) => {
+      const map: Record<string, string> = {
+          'reduzir_carga': 'Reduzir Impostos',
+          'dividas': 'Regularização de Dívidas',
+          'recuperacao_credito': 'Recuperação de Créditos',
+          'reforma_tributaria': 'Reforma Tributária',
+          'bpo': 'BPO Financeiro',
+          'fiscalizacao': 'Fiscalização / Autuação',
+          'abertura': 'Abertura de Empresa'
+      };
+      return map[val] || val;
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -409,7 +459,7 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
                 disabled={isSubmitting}
                 className="w-full bg-blue-600 text-white font-bold py-4 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/50 transition-all shadow-lg hover:shadow-blue-600/30 flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed text-lg"
               >
-                {isSubmitting ? 'Analisando perfil...' : 'Solicitar Diagnóstico Gratuito'}
+                {isSubmitting ? 'Enviando...' : 'Solicitar Diagnóstico Gratuito'}
               </button>
               <p className="text-xs text-center text-slate-500 mt-4">
                 Seus dados comerciais são confidenciais e protegidos pela LGPD.
