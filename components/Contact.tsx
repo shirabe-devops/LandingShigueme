@@ -104,7 +104,7 @@ export const Contact: React.FC<ContactProps> = () => {
             return;
         }
         setUserData(prev => ({ ...prev, name: value }));
-        addBotMessage(`Prazer, ${value.split(' ')[0]}! Qual é o nome da sua empresa?`, 600, () => setCurrentStep('COMPANY'));
+        addBotMessage(`Prazer, ${value.split(' ')[0]}! Qual é o seu nome?`, 600, () => setCurrentStep('COMPANY'));
         break;
 
       case 'COMPANY':
@@ -145,6 +145,7 @@ export const Contact: React.FC<ContactProps> = () => {
         setUserData(prev => ({ ...prev, revenue: value }));
         
         const regimeOptions: ChatOption[] = [
+            { label: 'MEI', value: 'mei' },
             { label: 'Simples Nacional', value: 'simples' },
             { label: 'Lucro Presumido', value: 'presumido' },
             { label: 'Lucro Real', value: 'real' },
@@ -206,7 +207,7 @@ export const Contact: React.FC<ContactProps> = () => {
     try {
         // Substitua '/api/n8n-proxy.php' pelo caminho real do arquivo no servidor
         // Em ambiente de desenvolvimento local (Vite), isso pode precisar de ajuste de proxy no vite.config ou URL completa
-        const response = await fetch('/api/n8n-proxy.php', {
+        const response = await fetch('n8n-proxy.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
