@@ -21,7 +21,7 @@ $n8nWebhookUrl = 'https://n8nwebhook.shirabe.com.br/webhook/lpshigueme';
 // =======================================================================
 
 // 1. Configurar CORS (Permitir que o React acesse este script)
-// Permite acesso de qualquer origem (*). Para mais segurança, troque '*' pelo seu domínio (ex: 'https://shigueme.com.br')
+// Permite acesso de qualquer origem (*). Para mais segurança, troque '*' pelo seu domínio (ex: 'https://shirabe.com.br')
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
