@@ -12,7 +12,7 @@ import {
 } from '../utils/validators';
 
 // CONFIGURAÇÃO DA URL DO N8N
-const N8N_WEBHOOK_URL = 'https://n8nwebhook.shirabe.com.br/webhook/lpshigueme'; 
+const N8N_WEBHOOK_URL = 'https://n8n.shirabe.com.br/webhook-test/lpshigueme'; 
 
 // Define os passos do fluxo do chat
 type ChatStep = 
