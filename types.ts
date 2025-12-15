@@ -29,14 +29,17 @@ export interface ChatMessage {
   content: string | React.ReactNode;
   type?: 'text' | 'options' | 'input';
   options?: ChatOption[];
-  inputType?: 'text' | 'email' | 'tel';
+  inputType?: 'text' | 'email' | 'tel' | 'number';
   isTyping?: boolean;
 }
 
 export interface UserData {
+  documentType: 'CPF' | 'CNPJ' | '';
+  documentValue: string;
   name: string;
   email: string;
   phone: string;
+  city: string; // Novo campo
   company: string;
   revenue: string;
   regime: string;
