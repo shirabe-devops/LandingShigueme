@@ -227,7 +227,7 @@ export const AIAssistant: React.FC = () => {
         // Envia para o proxy PHP que deve estar na pasta public/api do build
         // Nota: Em ambiente de desenvolvimento local (Vite), o PHP não é processado.
         // Você precisa testar isso no servidor Hostinger ou configurar um proxy local.
-        const response = await fetch('/api/n8n-proxy.php', {
+        const response = await fetch('/n8n-proxy.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
