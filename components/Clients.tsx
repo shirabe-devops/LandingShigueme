@@ -33,7 +33,7 @@ const ClientLogo = ({ name, logo }: { name: string; logo: string }) => {
         <img 
           src={logo} 
           alt={`Logo ${name}`} 
-          className="h-25 md:h-33 max-w-[160px] md:max-w-[220px] object-contain" 
+          className="h-20 md:h-28 max-w-[160px] md:max-w-[220px] object-contain" 
           loading="lazy"
           onError={() => setImgError(true)}
         />
@@ -55,7 +55,7 @@ export const Clients: React.FC = () => {
         </p>
         
         {/* Layout em Grid Responsivo */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-11 items-center justify-items-center">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 items-center justify-items-center">
           {clients.map((client, index) => (
             <ClientLogo key={`${client.name}-${index}`} name={client.name} logo={client.logo} />
           ))}
