@@ -15,7 +15,6 @@ const N8N_WEBHOOK_URL = 'https://n8nwebhook.shirabe.com.br/webhook/lpshigueme';
 
 type ChatStep = 
   | 'INTRO'
-  | 'DOC_TYPE'
   | 'DOC_VALUE'
   | 'NAME' 
   | 'COMPANY' 
@@ -40,7 +39,6 @@ export const AIAssistant: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   
-  // Estado para controle refinado da viewport (teclado)
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [viewportHeight, setViewportHeight] = useState(0);
   
@@ -62,7 +60,6 @@ export const AIAssistant: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // FUNÇÃO DE AUTO-SCROLL
   const scrollToBottom = (behavior: ScrollBehavior = 'smooth') => {
     if (messagesEndRef.current) {
         messagesEndRef.current.scrollIntoView({ 
@@ -72,7 +69,6 @@ export const AIAssistant: React.FC = () => {
     }
   };
 
-  // MONITORAMENTO DA VIEWPORT (TECLADO MOBILE)
   useEffect(() => {
     const vv = window.visualViewport;
     if (!vv) return;
@@ -83,15 +79,12 @@ export const AIAssistant: React.FC = () => {
       setViewportHeight(vv.height);
       
       if (kHeight > 0) {
-        // Quando o teclado abre ou muda, garante que o final do chat esteja visível
         setTimeout(() => scrollToBottom('auto'), 100);
       }
     };
 
     vv.addEventListener('resize', handleViewportChange);
     vv.addEventListener('scroll', handleViewportChange);
-    
-    // Inicializar valores
     handleViewportChange();
 
     return () => {
@@ -100,7 +93,6 @@ export const AIAssistant: React.FC = () => {
     };
   }, []);
 
-  // Scroll sempre que mensagens mudam ou o bot para de digitar
   useEffect(() => {
     if (isOpen) {
       const timer = setTimeout(() => scrollToBottom(), 100);
@@ -138,7 +130,6 @@ export const AIAssistant: React.FC = () => {
     }
   }, [isOpen]);
 
-  // Foco automático e scroll no input ao mudar de passo
   useEffect(() => {
     if (isOpen && !isTyping && currentStep !== 'INTRO' && currentStep !== 'SUBMITTING' && currentStep !== 'SUCCESS') {
       const timer = setTimeout(() => {
@@ -153,12 +144,7 @@ export const AIAssistant: React.FC = () => {
     setMessages([]);
     addBotMessage("Olá! Sou o seu assistente virtual. 🤖", 500);
     addBotMessage("Para iniciarmos o diagnóstico tributário, preciso identificar você.", 1500);
-    
-    const docOptions: ChatOption[] = [
-        { label: 'CPF (Pessoa Física)', value: 'CPF' },
-        { label: 'CNPJ (Empresa)', value: 'CNPJ' }
-    ];
-    addBotMessage("Você gostaria de iniciar com CPF ou CNPJ?", 2500, () => setCurrentStep('DOC_TYPE'), docOptions);
+    addBotMessage("Por favor, digite seu CPF ou o CNPJ da sua empresa.", 2500, () => setCurrentStep('DOC_VALUE'));
   };
 
   const addBotMessage = (text: string, delay: number = 0, callback?: () => void, options?: ChatOption[]) => {
@@ -203,28 +189,33 @@ export const AIAssistant: React.FC = () => {
     const cleanValue = value.trim();
 
     switch (currentStep) {
-      case 'DOC_TYPE':
-        if (value === 'CPF' || value === 'CNPJ') {
-            setUserData(prev => ({ ...prev, documentType: value as any }));
-            addBotMessage(`Perfeito. Por favor, digite o número do ${value}.`, 600, () => setCurrentStep('DOC_VALUE'));
-        } else {
-            addBotMessage("Por favor, selecione uma das opções abaixo.", 500);
-        }
-        break;
-
       case 'DOC_VALUE':
-        const isCpf = userData.documentType === 'CPF';
-        const isValidDoc = isCpf ? validateCPF(value) : validateCNPJ(value);
+        const digitsOnly = value.replace(/\D/g, '');
+        let docType: 'CPF' | 'CNPJ' | '' = '';
+        let isValidDoc = false;
+        let formattedDoc = '';
+
+        if (digitsOnly.length === 11) {
+          docType = 'CPF';
+          isValidDoc = validateCPF(digitsOnly);
+          formattedDoc = formatCPF(digitsOnly);
+        } else if (digitsOnly.length === 14) {
+          docType = 'CNPJ';
+          isValidDoc = validateCNPJ(digitsOnly);
+          formattedDoc = formatCNPJ(digitsOnly);
+        } else {
+          addBotMessage("Documento inválido. Digite 11 números para CPF ou 14 para CNPJ.", 500);
+          return;
+        }
         
         if (!isValidDoc) {
-            addBotMessage(`${userData.documentType} inválido. Por favor, verifique os números e tente novamente.`, 500);
+            addBotMessage(`${docType} inválido. Por favor, verifique os números e tente novamente.`, 500);
             return;
         }
         
-        const formattedDoc = isCpf ? formatCPF(value) : formatCNPJ(value);
-        setUserData(prev => ({ ...prev, documentValue: formattedDoc }));
-        addBotMessage("Documento validado! ✅", 500);
-        addBotMessage("Qual é o seu nome completo?", 1500, () => setCurrentStep('NAME'));
+        setUserData(prev => ({ ...prev, documentType: docType, documentValue: formattedDoc }));
+        addBotMessage(`${docType} validado com sucesso! ✅`, 500);
+        addBotMessage("Agora, qual é o seu nome completo?", 1500, () => setCurrentStep('NAME'));
         break;
 
       case 'NAME':
@@ -403,7 +394,6 @@ export const AIAssistant: React.FC = () => {
       }}
     >
       
-      {/* Balão de Notificação */}
       {!isOpen && (
         <div 
           className={`bg-white text-slate-800 px-4 py-3 rounded-2xl shadow-xl border border-slate-100 max-w-[250px] mb-3 mr-6 transition-all duration-500 origin-bottom-right pointer-events-auto ${
@@ -430,7 +420,6 @@ export const AIAssistant: React.FC = () => {
         </div>
       )}
 
-      {/* JANELA DO CHAT */}
       <div 
         className={`bg-slate-900 border-slate-700 shadow-2xl flex flex-col overflow-hidden transition-all duration-300 origin-bottom pointer-events-auto ${
           isOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-90 translate-y-10 pointer-events-none hidden'
@@ -443,7 +432,6 @@ export const AIAssistant: React.FC = () => {
             height: keyboardHeight > 0 ? `${viewportHeight}px` : undefined 
         }}
       >
-         {/* Header */}
          <div className="bg-slate-950 p-4 flex items-center justify-between border-b border-slate-800 shrink-0">
             <div className="flex items-center gap-3">
                <div className="relative">
@@ -465,7 +453,6 @@ export const AIAssistant: React.FC = () => {
             </button>
          </div>
 
-         {/* Messages Area */}
          <div 
             className="flex-grow p-4 overflow-y-auto bg-slate-900 scrollbar-hide space-y-3"
          >
@@ -498,7 +485,6 @@ export const AIAssistant: React.FC = () => {
             <div ref={messagesEndRef} className="h-4 w-full clear-both" />
          </div>
 
-         {/* Input Area */}
          <div className="p-3 bg-slate-950 border-t border-slate-800 shrink-0">
             <form onSubmit={handleTextSubmit} className="flex gap-2">
                <input
@@ -523,7 +509,6 @@ export const AIAssistant: React.FC = () => {
          </div>
       </div>
 
-      {/* FAB (Floating Action Button) */}
       <button
         onClick={() => {
             setIsOpen(!isOpen);
