@@ -11,7 +11,6 @@ import {
   formatPhone 
 } from '../utils/validators';
 
-// CONFIGURAÇÃO DA URL DO N8N
 const N8N_WEBHOOK_URL = 'https://n8nwebhook.shirabe.com.br/webhook/lpshigueme'; 
 
 type ChatStep = 
@@ -41,7 +40,9 @@ export const AIAssistant: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   
-  const [keyboardOffset, setKeyboardOffset] = useState(0);
+  // Estado para controle refinado da viewport (teclado)
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [viewportHeight, setViewportHeight] = useState(0);
   
   const [userData, setUserData] = useState<UserData>({
     documentType: '',
@@ -59,10 +60,9 @@ export const AIAssistant: React.FC = () => {
   });
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // FUNÇÃO DE AUTO-SCROLL REFORÇADA
+  // FUNÇÃO DE AUTO-SCROLL
   const scrollToBottom = (behavior: ScrollBehavior = 'smooth') => {
     if (messagesEndRef.current) {
         messagesEndRef.current.scrollIntoView({ 
@@ -72,34 +72,41 @@ export const AIAssistant: React.FC = () => {
     }
   };
 
-  // Efeito para detectar teclado e ajustar viewport
+  // MONITORAMENTO DA VIEWPORT (TECLADO MOBILE)
   useEffect(() => {
-    if (!window.visualViewport) return;
+    const vv = window.visualViewport;
+    if (!vv) return;
 
-    const handleResize = () => {
-      if (window.visualViewport) {
-        const offset = window.innerHeight - window.visualViewport.height;
-        setKeyboardOffset(offset > 0 ? offset : 0);
-        
-        if (offset > 0) {
-            // Scroll imediato quando o teclado abre
-            setTimeout(() => scrollToBottom('auto'), 50);
-        }
+    const handleViewportChange = () => {
+      const kHeight = window.innerHeight - vv.height;
+      setKeyboardHeight(kHeight > 0 ? kHeight : 0);
+      setViewportHeight(vv.height);
+      
+      if (kHeight > 0) {
+        // Quando o teclado abre ou muda, garante que o final do chat esteja visível
+        setTimeout(() => scrollToBottom('auto'), 100);
       }
     };
 
-    window.visualViewport.addEventListener('resize', handleResize);
-    return () => window.visualViewport?.removeEventListener('resize', handleResize);
+    vv.addEventListener('resize', handleViewportChange);
+    vv.addEventListener('scroll', handleViewportChange);
+    
+    // Inicializar valores
+    handleViewportChange();
+
+    return () => {
+      vv.removeEventListener('resize', handleViewportChange);
+      vv.removeEventListener('scroll', handleViewportChange);
+    };
   }, []);
 
-  // Scroll automático quando mensagens mudam, bot digita ou para de digitar
+  // Scroll sempre que mensagens mudam ou o bot para de digitar
   useEffect(() => {
     if (isOpen) {
-      // Pequeno delay para garantir que o DOM (especialmente os botões) já foi renderizado
       const timer = setTimeout(() => scrollToBottom(), 100);
       return () => clearTimeout(timer);
     }
-  }, [messages, isOpen, isTyping, currentStep]);
+  }, [messages, isOpen, isTyping]);
 
   useEffect(() => {
     const handleOpenChat = () => {
@@ -131,9 +138,14 @@ export const AIAssistant: React.FC = () => {
     }
   }, [isOpen]);
 
+  // Foco automático e scroll no input ao mudar de passo
   useEffect(() => {
     if (isOpen && !isTyping && currentStep !== 'INTRO' && currentStep !== 'SUBMITTING' && currentStep !== 'SUCCESS') {
-      setTimeout(() => inputRef.current?.focus(), 100);
+      const timer = setTimeout(() => {
+        inputRef.current?.focus();
+        scrollToBottom();
+      }, 150);
+      return () => clearTimeout(timer);
     }
   }, [isTyping, currentStep, isOpen]);
 
@@ -382,18 +394,19 @@ export const AIAssistant: React.FC = () => {
 
   return (
     <div 
-      className="fixed z-50 flex flex-col items-end pointer-events-none"
+      className="fixed z-[9999] flex flex-col items-end pointer-events-none w-full sm:w-auto"
       style={{ 
-        bottom: `calc(${keyboardOffset}px + 1.5rem)`, 
-        right: '1.5rem',
-        left: keyboardOffset > 0 ? '1.5rem' : 'auto'
+        bottom: keyboardHeight > 0 ? `${keyboardHeight}px` : '1.5rem', 
+        right: keyboardHeight > 0 ? '0' : '1.5rem',
+        left: keyboardHeight > 0 ? '0' : 'auto',
+        transition: 'bottom 0.1s ease-out'
       }}
     >
       
       {/* Balão de Notificação */}
       {!isOpen && (
         <div 
-          className={`bg-white text-slate-800 px-4 py-3 rounded-2xl shadow-xl border border-slate-100 max-w-[250px] mb-3 transition-all duration-500 origin-bottom-right pointer-events-auto ${
+          className={`bg-white text-slate-800 px-4 py-3 rounded-2xl shadow-xl border border-slate-100 max-w-[250px] mb-3 mr-6 transition-all duration-500 origin-bottom-right pointer-events-auto ${
             showNotification ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-75 translate-y-4 pointer-events-none'
           }`}
         >
@@ -419,11 +432,16 @@ export const AIAssistant: React.FC = () => {
 
       {/* JANELA DO CHAT */}
       <div 
-        className={`bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden transition-all duration-300 origin-bottom-right pointer-events-auto ${
+        className={`bg-slate-900 border-slate-700 shadow-2xl flex flex-col overflow-hidden transition-all duration-300 origin-bottom pointer-events-auto ${
           isOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-90 translate-y-10 pointer-events-none hidden'
         } ${
-          keyboardOffset > 0 ? 'w-full h-[45vh]' : 'w-[320px] sm:w-[380px] h-[500px]'
+          keyboardHeight > 0 
+          ? 'w-full h-full max-h-[100dvh] rounded-none' 
+          : 'w-[320px] sm:w-[380px] h-[500px] rounded-2xl border'
         }`}
+        style={{ 
+            height: keyboardHeight > 0 ? `${viewportHeight}px` : undefined 
+        }}
       >
          {/* Header */}
          <div className="bg-slate-950 p-4 flex items-center justify-between border-b border-slate-800 shrink-0">
@@ -449,7 +467,6 @@ export const AIAssistant: React.FC = () => {
 
          {/* Messages Area */}
          <div 
-            ref={scrollContainerRef}
             className="flex-grow p-4 overflow-y-auto bg-slate-900 scrollbar-hide space-y-3"
          >
             {messages.map((msg) => (
@@ -474,7 +491,6 @@ export const AIAssistant: React.FC = () => {
                 </div>
             )}
 
-            {/* O Ref de scroll foi movido para envolver as opções e o final */}
             <div className="pl-2">
                 {renderOptions()}
             </div>
@@ -487,6 +503,7 @@ export const AIAssistant: React.FC = () => {
             <form onSubmit={handleTextSubmit} className="flex gap-2">
                <input
                   ref={inputRef}
+                  onFocus={() => setTimeout(scrollToBottom, 200)}
                   type={currentStep === 'PHONE' || currentStep === 'DOC_VALUE' ? 'tel' : currentStep === 'EMAIL' ? 'email' : 'text'}
                   value={userInput}
                   onChange={(e) => setUserInput(e.target.value)}
@@ -512,22 +529,16 @@ export const AIAssistant: React.FC = () => {
             setIsOpen(!isOpen);
             setShowNotification(false);
         }}
-        className={`group relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full shadow-2xl transition-all duration-300 z-50 pointer-events-auto ${
-            isOpen ? 'bg-slate-700 rotate-90' : 'bg-blue-600 hover:bg-blue-500 hover:scale-110'
+        className={`group relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full shadow-2xl transition-all duration-300 z-50 pointer-events-auto mr-6 mb-0 ${
+            isOpen ? 'bg-slate-700 rotate-90 scale-0' : 'bg-blue-600 hover:bg-blue-500 hover:scale-110'
         }`}
         aria-label="Abrir Chat"
-        style={{ display: keyboardOffset > 0 && isOpen ? 'none' : 'flex' }}
+        style={{ display: isOpen ? 'none' : 'flex' }}
       >
-        {isOpen ? (
-            <IconX className="w-6 h-6 text-white" />
-        ) : (
-            <>
-                <span className="absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-20 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]"></span>
-                <IconMessageCircle className="w-7 h-7 text-white relative z-10" />
-                {showNotification && (
-                    <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 border-2 border-white rounded-full"></span>
-                )}
-            </>
+        <span className="absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-20 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]"></span>
+        <IconMessageCircle className="w-7 h-7 text-white relative z-10" />
+        {showNotification && (
+            <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 border-2 border-white rounded-full"></span>
         )}
       </button>
     </div>
