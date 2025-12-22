@@ -95,7 +95,7 @@ export function MorphingCardStack({
   }
 
   const containerStyles = {
-    stack: "relative h-64 w-64",
+    stack: "relative h-72 w-64 md:w-72",
     grid: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 w-full",
     list: "flex flex-col gap-3 w-full",
   }
@@ -164,9 +164,9 @@ export function MorphingCardStack({
                     onCardClick?.(card)
                   }}
                   className={cn(
-                    "cursor-pointer rounded-xl border border-slate-800 bg-slate-900/40 backdrop-blur-sm p-4",
+                    "cursor-pointer rounded-2xl border border-slate-800 bg-slate-900/40 backdrop-blur-sm p-5",
                     "hover:border-blue-500/50 transition-colors",
-                    layout === "stack" && "absolute w-64 h-56",
+                    layout === "stack" && "absolute w-64 md:w-72 h-64 md:h-72",
                     layout === "stack" && isTopCard && "cursor-grab active:cursor-grabbing",
                     layout === "grid" && "w-full",
                     layout === "list" && "w-full",
@@ -176,18 +176,30 @@ export function MorphingCardStack({
                     backgroundColor: card.color || undefined,
                   }}
                 >
-                  <div className="flex items-start gap-4 h-full">
+                  <div className={cn(
+                    "flex gap-4 h-full",
+                    layout === "stack" ? "flex-col items-center text-center justify-center" : "flex-row items-start"
+                  )}>
                     {card.icon && (
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-800/80 text-blue-400 border border-slate-700">
+                      <div className={cn(
+                        "flex shrink-0 items-center justify-center rounded-xl bg-slate-800/80 text-blue-400 border border-slate-700 shadow-inner",
+                        layout === "stack" ? "h-12 w-12 mb-2" : "h-12 w-12"
+                      )}>
                         {card.icon}
                       </div>
                     )}
-                    <div className="min-w-0 flex-1 flex flex-col justify-center h-full">
-                      <h3 className="font-bold text-white text-lg truncate mb-1">{card.title}</h3>
+                    <div className={cn(
+                      "min-w-0 flex-1 flex flex-col",
+                      layout === "stack" ? "items-center" : "justify-center h-full"
+                    )}>
+                      <h3 className={cn(
+                        "font-bold text-white text-lg mb-2 leading-tight",
+                        layout === "stack" ? "text-base md:text-lg" : "truncate"
+                      )}>{card.title}</h3>
                       <p
                         className={cn(
-                          "text-sm text-slate-400",
-                          layout === "stack" && "line-clamp-4",
+                          "text-slate-400 leading-relaxed",
+                          layout === "stack" ? "text-xs md:text-sm line-clamp-4" : "text-sm",
                           layout === "grid" && "line-clamp-3",
                           layout === "list" && "line-clamp-2",
                         )}
@@ -198,8 +210,8 @@ export function MorphingCardStack({
                   </div>
 
                   {isTopCard && (
-                    <div className="absolute bottom-2 left-0 right-0 text-center">
-                      <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Arraste para navegar</span>
+                    <div className="absolute bottom-3 left-0 right-0 text-center">
+                      <span className="text-[9px] text-slate-500 uppercase tracking-[0.2em] font-bold animate-pulse">Deslize para navegar</span>
                     </div>
                   )}
                 </motion.div>
@@ -210,14 +222,14 @@ export function MorphingCardStack({
       </LayoutGroup>
 
       {layout === "stack" && cards.length > 1 && (
-        <div className="flex justify-center gap-2 pt-2">
+        <div className="flex justify-center gap-2 pt-4">
           {cards.map((_, index) => (
             <button
               key={index}
               onClick={() => setActiveIndex(index)}
               className={cn(
                 "h-1.5 rounded-full transition-all duration-300",
-                index === activeIndex ? "w-6 bg-blue-500" : "w-1.5 bg-slate-700 hover:bg-slate-600",
+                index === activeIndex ? "w-8 bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" : "w-1.5 bg-slate-700 hover:bg-slate-600",
               )}
               aria-label={`Go to card ${index + 1}`}
             />
