@@ -71,7 +71,7 @@ export const AIAssistant: React.FC = () => {
     }
   };
 
-  // Monitoramento avançado da Viewport para dispositivos móveis
+  // Monitoramento da Viewport para ajuste de posição (sem Full Screen)
   useEffect(() => {
     const vv = window.visualViewport;
     if (!vv) return;
@@ -81,7 +81,6 @@ export const AIAssistant: React.FC = () => {
       setKeyboardHeight(kHeight > 0 ? kHeight : 0);
       setViewportHeight(vv.height);
       
-      // Scroll imediato ao abrir teclado ou redimensionar
       if (isOpen) {
         setTimeout(() => scrollToBottom('auto'), 50);
       }
@@ -97,7 +96,7 @@ export const AIAssistant: React.FC = () => {
     };
   }, [isOpen]);
 
-  // Scroll automático em todas as mudanças de estado cruciais
+  // Scroll automático para cada nova mensagem ou interação
   useEffect(() => {
     if (isOpen) {
       const timer = setTimeout(() => scrollToBottom(), 100);
@@ -135,7 +134,7 @@ export const AIAssistant: React.FC = () => {
     }
   }, [isOpen]);
 
-  // Foco e scroll ao mudar de passo
+  // Foco e scroll ao mudar de passo (pergunta)
   useEffect(() => {
     if (isOpen && !isTyping && currentStep !== 'INTRO' && currentStep !== 'SUBMITTING' && currentStep !== 'SUCCESS') {
       const timer = setTimeout(() => {
@@ -389,26 +388,23 @@ export const AIAssistant: React.FC = () => {
 
   const isInputDisabled = currentStep === 'INTRO' || currentStep === 'SUBMITTING' || currentStep === 'SUCCESS' || currentStep === 'ERROR' || isTyping || (messages[messages.length - 1]?.role === 'bot' && !!messages[messages.length - 1]?.options);
 
-  // Determinar se o chat deve ser full screen (Mobile + Teclado)
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
-  const isFullScreen = isOpen && isMobile && keyboardHeight > 0;
-
   return (
     <div 
       className="fixed z-[9999] flex flex-col items-end pointer-events-none"
       style={{ 
-        bottom: isFullScreen ? '0' : (keyboardHeight > 0 ? `${keyboardHeight}px` : '1.5rem'), 
-        right: isFullScreen ? '0' : (keyboardHeight > 0 ? '0' : '1.5rem'),
-        left: isFullScreen ? '0' : (keyboardHeight > 0 ? '0' : 'auto'),
-        top: isFullScreen ? '0' : 'auto',
-        width: isFullScreen ? '100%' : 'auto',
-        transition: 'all 0.15s ease-out'
+        // O chat se move para cima para não ser coberto pelo teclado, mas mantém margens
+        bottom: keyboardHeight > 0 ? `${keyboardHeight + 10}px` : '1.5rem', 
+        right: '1.5rem',
+        left: '1.5rem', // No mobile, isso ajuda a centralizar se a largura for w-auto
+        maxWidth: 'calc(100% - 3rem)',
+        width: 'auto',
+        transition: 'bottom 0.2s ease-out'
       }}
     >
       
       {!isOpen && (
         <div 
-          className={`bg-white text-slate-800 px-4 py-3 rounded-2xl shadow-xl border border-slate-100 max-w-[250px] mb-3 mr-6 transition-all duration-500 origin-bottom-right pointer-events-auto ${
+          className={`bg-white text-slate-800 px-4 py-3 rounded-2xl shadow-xl border border-slate-100 max-w-[250px] mb-3 transition-all duration-500 origin-bottom-right pointer-events-auto ${
             showNotification ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-75 translate-y-4 pointer-events-none'
           }`}
         >
@@ -433,15 +429,12 @@ export const AIAssistant: React.FC = () => {
       )}
 
       <div 
-        className={`bg-slate-900 border-slate-700 shadow-2xl flex flex-col overflow-hidden transition-all duration-300 origin-bottom pointer-events-auto ${
+        className={`bg-slate-900 border-slate-700 shadow-2xl flex flex-col overflow-hidden transition-all duration-300 origin-bottom pointer-events-auto w-full sm:w-[380px] h-[500px] rounded-2xl border ${
           isOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-90 translate-y-10 pointer-events-none hidden'
-        } ${
-          isFullScreen 
-          ? 'w-full h-full rounded-none border-none' 
-          : 'w-[320px] sm:w-[380px] h-[500px] rounded-2xl border'
         }`}
         style={{ 
-            height: isFullScreen ? `${viewportHeight}px` : (keyboardHeight > 0 ? `${viewportHeight}px` : undefined)
+            // Altura máxima ajustada para caber no viewport restante quando o teclado estiver aberto
+            maxHeight: keyboardHeight > 0 ? `calc(${viewportHeight}px - 2rem)` : '500px'
         }}
       >
          <div className="bg-slate-950 p-4 flex items-center justify-between border-b border-slate-800 shrink-0">
@@ -503,7 +496,6 @@ export const AIAssistant: React.FC = () => {
                <input
                   ref={inputRef}
                   onFocus={() => {
-                    // Scroll suave forçado ao focar
                     setTimeout(scrollToBottom, 300);
                   }}
                   type={currentStep === 'PHONE' || currentStep === 'DOC_VALUE' ? 'tel' : currentStep === 'EMAIL' ? 'email' : 'text'}
@@ -530,7 +522,7 @@ export const AIAssistant: React.FC = () => {
             setIsOpen(!isOpen);
             setShowNotification(false);
         }}
-        className={`group relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full shadow-2xl transition-all duration-300 z-50 pointer-events-auto mr-6 mb-0 ${
+        className={`group relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full shadow-2xl transition-all duration-300 z-50 pointer-events-auto mb-0 ${
             isOpen ? 'bg-slate-700 rotate-90 scale-0' : 'bg-blue-600 hover:bg-blue-500 hover:scale-110'
         }`}
         aria-label="Abrir Chat"
