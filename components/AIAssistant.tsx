@@ -164,6 +164,11 @@ export const AIAssistant: React.FC = () => {
         options: options
       }]);
       if (callback) callback();
+      
+      // Força o foco de volta para manter o teclado aberto
+      if (isOpen && currentStep !== 'SUBMITTING' && currentStep !== 'SUCCESS') {
+          inputRef.current?.focus();
+      }
     }, delay);
   };
 
@@ -386,19 +391,19 @@ export const AIAssistant: React.FC = () => {
     return null;
   };
 
-  const isInputDisabled = currentStep === 'INTRO' || currentStep === 'SUBMITTING' || currentStep === 'SUCCESS' || currentStep === 'ERROR' || isTyping || (messages[messages.length - 1]?.role === 'bot' && !!messages[messages.length - 1]?.options);
+  // Alterado: Não usamos disabled para não fechar o teclado no mobile
+  const isInputBusy = currentStep === 'INTRO' || currentStep === 'SUBMITTING' || currentStep === 'SUCCESS' || currentStep === 'ERROR' || isTyping || (messages[messages.length - 1]?.role === 'bot' && !!messages[messages.length - 1]?.options);
 
   return (
     <div 
       className="fixed z-[9999] flex flex-col items-end pointer-events-none"
       style={{ 
-        // O chat se move para cima para não ser coberto pelo teclado, mas mantém margens
         bottom: keyboardHeight > 0 ? `${keyboardHeight + 10}px` : '1.5rem', 
         right: '1.5rem',
-        left: '1.5rem', // No mobile, isso ajuda a centralizar se a largura for w-auto
+        left: '1.5rem',
         maxWidth: 'calc(100% - 3rem)',
         width: 'auto',
-        transition: 'bottom 0.2s ease-out'
+        transition: 'bottom 0.1s ease-out'
       }}
     >
       
@@ -433,7 +438,6 @@ export const AIAssistant: React.FC = () => {
           isOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-90 translate-y-10 pointer-events-none hidden'
         }`}
         style={{ 
-            // Altura máxima ajustada para caber no viewport restante quando o teclado estiver aberto
             maxHeight: keyboardHeight > 0 ? `calc(${viewportHeight}px - 2rem)` : '500px'
         }}
       >
@@ -501,14 +505,16 @@ export const AIAssistant: React.FC = () => {
                   type={currentStep === 'PHONE' || currentStep === 'DOC_VALUE' ? 'tel' : currentStep === 'EMAIL' ? 'email' : 'text'}
                   value={userInput}
                   onChange={(e) => setUserInput(e.target.value)}
-                  placeholder={isInputDisabled ? "Aguarde..." : "Digite aqui..."}
-                  disabled={isInputDisabled}
-                  className="flex-grow bg-slate-900 text-white text-sm rounded-lg px-3 py-2.5 outline-none border border-slate-800 focus:border-blue-500 transition-colors disabled:opacity-50"
+                  placeholder={isInputBusy ? "Aguarde..." : "Digite aqui..."}
+                  readOnly={isInputBusy} // Usamos readOnly para manter o teclado visível no mobile
+                  className={`flex-grow bg-slate-900 text-white text-sm rounded-lg px-3 py-2.5 outline-none border transition-colors ${
+                      isInputBusy ? 'border-slate-800 opacity-60 cursor-not-allowed' : 'border-slate-800 focus:border-blue-500'
+                  }`}
                   autoComplete="off"
                />
                <button 
                   type="submit"
-                  disabled={isInputDisabled || !userInput.trim()}
+                  disabled={isInputBusy || !userInput.trim()}
                   className="bg-blue-600 hover:bg-blue-500 text-white p-2.5 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg active:scale-95"
                >
                   <IconSend className="w-5 h-5" />
