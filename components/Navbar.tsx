@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { IconMenu, IconX } from './Icons';
 
@@ -22,7 +23,7 @@ export const Navbar: React.FC = () => {
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300 group-hover:to-white">
                 Shigueme
               </span>
-              <span className="text-blue-400 font-semibold">Consultoria</span>
+              <span className="text-blue-400 font-semibold whitespace-nowrap">Consultoria Tributária</span>
             </a>
           </div>
 

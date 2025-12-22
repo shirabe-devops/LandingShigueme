@@ -1,13 +1,10 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { IconMessageCircle, IconX, IconSend, IconShield } from './Icons';
 import { ChatMessage, ChatOption, UserData } from '../types';
 import { 
-  validateCPF, 
-  validateCNPJ, 
   validatePhone, 
   validateEmail, 
-  formatCPF, 
-  formatCNPJ, 
   formatPhone 
 } from '../utils/validators';
 
@@ -15,7 +12,7 @@ const N8N_WEBHOOK_URL = 'https://n8nwebhook.shirabe.com.br/webhook/lpshigueme';
 
 type ChatStep = 
   | 'INTRO'
-  | 'DOC_VALUE'
+  | 'SERVICE_SELECTION' 
   | 'NAME' 
   | 'COMPANY' 
   | 'EMAIL' 
@@ -43,6 +40,7 @@ export const AIAssistant: React.FC = () => {
   const [viewportHeight, setViewportHeight] = useState(0);
   
   const [userData, setUserData] = useState<UserData>({
+    service: '',
     documentType: '',
     documentValue: '',
     name: '', 
@@ -61,7 +59,6 @@ export const AIAssistant: React.FC = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Sistema de Scroll Automático Reforçado
   const scrollToBottom = (behavior: ScrollBehavior = 'smooth') => {
     if (messagesEndRef.current) {
         messagesEndRef.current.scrollIntoView({ 
@@ -71,7 +68,6 @@ export const AIAssistant: React.FC = () => {
     }
   };
 
-  // Monitoramento da Viewport para ajuste de posição (sem Full Screen)
   useEffect(() => {
     const vv = window.visualViewport;
     if (!vv) return;
@@ -96,7 +92,6 @@ export const AIAssistant: React.FC = () => {
     };
   }, [isOpen]);
 
-  // Scroll automático para cada nova mensagem ou interação
   useEffect(() => {
     if (isOpen) {
       const timer = setTimeout(() => scrollToBottom(), 100);
@@ -134,9 +129,8 @@ export const AIAssistant: React.FC = () => {
     }
   }, [isOpen]);
 
-  // Foco e scroll ao mudar de passo (pergunta)
   useEffect(() => {
-    if (isOpen && !isTyping && currentStep !== 'INTRO' && currentStep !== 'SUBMITTING' && currentStep !== 'SUCCESS') {
+    if (isOpen && !isTyping && currentStep !== 'INTRO' && currentStep !== 'SERVICE_SELECTION' && currentStep !== 'SUBMITTING' && currentStep !== 'SUCCESS') {
       const timer = setTimeout(() => {
         inputRef.current?.focus();
         scrollToBottom();
@@ -147,9 +141,17 @@ export const AIAssistant: React.FC = () => {
 
   const startConversation = () => {
     setMessages([]);
-    addBotMessage("Olá! Sou o seu assistente virtual. 🤖", 500);
-    addBotMessage("Para iniciarmos o diagnóstico tributário, preciso identificar você.", 1500);
-    addBotMessage("Por favor, digite seu CPF ou o CNPJ da sua empresa.", 2500, () => setCurrentStep('DOC_VALUE'));
+    addBotMessage("Olá! Sou o seu assistente virtual da Shigueme Consultoria Tributária. 🤖", 500);
+    
+    const serviceOptions: ChatOption[] = [
+        { label: 'Diagnóstico Contábil', value: 'diagnostico-contabil' },
+        { label: 'Adequação à Reforma', value: 'adequacao-reforma' },
+        { label: 'Recuperação de Créditos', value: 'recuperacao-creditos' },
+        { label: 'Soluções para o Agro', value: 'agro-intelligence' },
+        { label: 'Planejamento Estratégico', value: 'planejamento-estrategico' },
+    ];
+
+    addBotMessage("Para começarmos, qual dessas soluções você está buscando hoje?", 1500, () => setCurrentStep('SERVICE_SELECTION'), serviceOptions);
   };
 
   const addBotMessage = (text: string, delay: number = 0, callback?: () => void, options?: ChatOption[]) => {
@@ -165,8 +167,7 @@ export const AIAssistant: React.FC = () => {
       }]);
       if (callback) callback();
       
-      // Força o foco de volta para manter o teclado aberto
-      if (isOpen && currentStep !== 'SUBMITTING' && currentStep !== 'SUCCESS') {
+      if (isOpen && currentStep !== 'SUBMITTING' && currentStep !== 'SUCCESS' && !options) {
           inputRef.current?.focus();
       }
     }, delay);
@@ -199,33 +200,9 @@ export const AIAssistant: React.FC = () => {
     const cleanValue = value.trim();
 
     switch (currentStep) {
-      case 'DOC_VALUE':
-        const digitsOnly = value.replace(/\D/g, '');
-        let docType: 'CPF' | 'CNPJ' | '' = '';
-        let isValidDoc = false;
-        let formattedDoc = '';
-
-        if (digitsOnly.length === 11) {
-          docType = 'CPF';
-          isValidDoc = validateCPF(digitsOnly);
-          formattedDoc = formatCPF(digitsOnly);
-        } else if (digitsOnly.length === 14) {
-          docType = 'CNPJ';
-          isValidDoc = validateCNPJ(digitsOnly);
-          formattedDoc = formatCNPJ(digitsOnly);
-        } else {
-          addBotMessage("Documento inválido. Digite 11 números para CPF ou 14 para CNPJ.", 500);
-          return;
-        }
-        
-        if (!isValidDoc) {
-            addBotMessage(`${docType} inválido. Por favor, verifique os números e tente novamente.`, 500);
-            return;
-        }
-        
-        setUserData(prev => ({ ...prev, documentType: docType, documentValue: formattedDoc }));
-        addBotMessage(`${docType} validado com sucesso! ✅`, 500);
-        addBotMessage("Agora, qual é o seu nome completo?", 1500, () => setCurrentStep('NAME'));
+      case 'SERVICE_SELECTION':
+        setUserData(prev => ({ ...prev, service: value }));
+        addBotMessage("Ótima escolha! Para prosseguirmos com o diagnóstico, qual é o seu nome completo?", 600, () => setCurrentStep('NAME'));
         break;
 
       case 'NAME':
@@ -269,16 +246,15 @@ export const AIAssistant: React.FC = () => {
         }
 
         setUserData(prev => ({ ...prev, city: cleanValue }));
-        addBotMessage(`Certo.`, 500);
-
+        
         const revenueOptions: ChatOption[] = [
-            { label: 'Até R$ 80k (MEI)', value: 'ate_50k' },
-            { label: 'R$ 80k - R$ 300k', value: '50k_300k' },
+            { label: 'Até R$ 80k (MEI)', value: 'ate_80k' },
+            { label: 'R$ 80k - R$ 300k', value: '80k_300k' },
             { label: 'R$ 300k - R$ 1M', value: '300k_1m' },
             { label: 'R$ 1M - R$ 5M', value: '1m_5m' },
             { label: 'Acima de R$ 5M', value: 'acima_5m' },
         ];
-        addBotMessage("Qual o faturamento mensal estimado da empresa?", 1500, () => setCurrentStep('REVENUE'), revenueOptions);
+        addBotMessage("Entendido. Qual o faturamento mensal estimado da empresa?", 800, () => setCurrentStep('REVENUE'), revenueOptions);
         break;
 
       case 'REVENUE':
@@ -316,7 +292,7 @@ export const AIAssistant: React.FC = () => {
             { label: 'Reduzir Impostos', value: 'reduzir_carga' },
             { label: 'Resolver Dívidas', value: 'dividas' },
             { label: 'Recup. Créditos', value: 'recuperacao_credito' },
-            { label: 'BPO Financeiro', value: 'bpo' },
+            { label: 'Diag. Contábil', value: 'diagnostico_contabil' },
             { label: 'Reforma Tributária', value: 'reforma_tributaria' },
             { label: 'Outro', value: 'outro' },
         ];
@@ -324,8 +300,16 @@ export const AIAssistant: React.FC = () => {
         break;
 
       case 'MAIN_NEED':
-        setUserData(prev => ({ ...prev, mainNeed: value }));
-        addBotMessage("Para finalizar, descreva brevemente como podemos ajudar.", 600, () => setCurrentStep('MESSAGE'));
+        if (value === 'outro') {
+          setUserData(prev => ({ ...prev, mainNeed: value }));
+          addBotMessage("Para finalizar, descreva brevemente como podemos ajudar.", 600, () => setCurrentStep('MESSAGE'));
+        } else {
+          // Se não for "Outro", finaliza imediatamente
+          const finalData = { ...userData, mainNeed: value, message: `Desafio selecionado via menu: ${value}` };
+          setUserData(finalData);
+          setCurrentStep('SUBMITTING');
+          submitToN8N(finalData);
+        }
         break;
 
       case 'MESSAGE':
@@ -391,7 +375,6 @@ export const AIAssistant: React.FC = () => {
     return null;
   };
 
-  // Alterado: Não usamos disabled para não fechar o teclado no mobile
   const isInputBusy = currentStep === 'INTRO' || currentStep === 'SUBMITTING' || currentStep === 'SUCCESS' || currentStep === 'ERROR' || isTyping || (messages[messages.length - 1]?.role === 'bot' && !!messages[messages.length - 1]?.options);
 
   return (
@@ -451,7 +434,7 @@ export const AIAssistant: React.FC = () => {
                </div>
                <div>
                   <h4 className="font-bold text-white text-sm">Assistente IA</h4>
-                  <p className="text-[10px] text-blue-400">Shigueme Consultoria</p>
+                  <p className="text-[10px] text-blue-400">Shigueme Consultoria Tributária</p>
                </div>
             </div>
             <button 
@@ -502,11 +485,11 @@ export const AIAssistant: React.FC = () => {
                   onFocus={() => {
                     setTimeout(scrollToBottom, 300);
                   }}
-                  type={currentStep === 'PHONE' || currentStep === 'DOC_VALUE' ? 'tel' : currentStep === 'EMAIL' ? 'email' : 'text'}
+                  type={currentStep === 'PHONE' ? 'tel' : currentStep === 'EMAIL' ? 'email' : 'text'}
                   value={userInput}
                   onChange={(e) => setUserInput(e.target.value)}
                   placeholder={isInputBusy ? "Aguarde..." : "Digite aqui..."}
-                  readOnly={isInputBusy} // Usamos readOnly para manter o teclado visível no mobile
+                  readOnly={isInputBusy}
                   className={`flex-grow bg-slate-900 text-white text-sm rounded-lg px-3 py-2.5 outline-none border transition-colors ${
                       isInputBusy ? 'border-slate-800 opacity-60 cursor-not-allowed' : 'border-slate-800 focus:border-blue-500'
                   }`}

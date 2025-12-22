@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { IconLinkedIn, IconFacebook, IconInstagram } from './Icons';
 
@@ -16,20 +17,20 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPrivacy }) => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div className="col-span-1 md:col-span-1">
              <a href="#home" className="font-bold text-xl md:text-2xl text-white tracking-tight block mb-4 hover:opacity-80 transition-opacity">
-               Shigueme<span className="text-blue-500"> Consultoria</span>
+               Shigueme<span className="text-blue-500"> Consultoria Tributária</span>
              </a>
              <p className="text-sm mb-4">
-               Soluções inteligentes para contabilidade, gestão financeira e planejamento tributário.
+               Soluções inteligentes para contabilidade estratégica, compliance agro e planejamento tributário.
              </p>
           </div>
           
           <div>
             <h4 className="text-white font-bold mb-4 uppercase text-sm tracking-wider">Serviços</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="#services" className="hover:text-blue-400 transition-colors">BPO Financeiro</a></li>
-              <li><a href="#services" className="hover:text-blue-400 transition-colors">Consultoria Tributária</a></li>
-              <li><a href="#services" className="hover:text-blue-400 transition-colors">Abertura de Empresas</a></li>
-              <li><a href="#services" className="hover:text-blue-400 transition-colors">Imposto de Renda</a></li>
+              <li><a href="#services" className="hover:text-blue-400 transition-colors">Consultoria Agro</a></li>
+              <li><a href="#services" className="hover:text-blue-400 transition-colors">Diagnóstico Contábil</a></li>
+              <li><a href="#services" className="hover:text-blue-400 transition-colors">Planejamento Estratégico</a></li>
+              <li><a href="#services" className="hover:text-blue-400 transition-colors">Recuperação de Créditos</a></li>
             </ul>
           </div>
 
@@ -37,11 +38,6 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPrivacy }) => {
             <h4 className="text-white font-bold mb-4 uppercase text-sm tracking-wider">Empresa</h4>
             <ul className="space-y-2 text-sm">
               <li><a href="#about" className="hover:text-blue-400 transition-colors">Sobre Nós</a></li>
-              <li>
-                <button onClick={openChat} className="hover:text-blue-400 transition-colors text-left">
-                  Carreiras
-                </button>
-              </li>
               <li>
                 <button onClick={onOpenPrivacy} className="hover:text-blue-400 transition-colors text-left">
                   Política de Privacidade

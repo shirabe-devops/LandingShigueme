@@ -1,8 +1,14 @@
 import React from 'react';
 import { MorphingCardStack, type CardData } from './ui/morphing-card-stack';
-import { BarChart3, Coins, Layers, TrendingUp, ShieldCheck } from 'lucide-react';
+import { BarChart3, Coins, ClipboardList, TrendingUp, Sprout } from 'lucide-react';
 
 const serviceCards: CardData[] = [
+  {
+    id: "diagnostico-contabil",
+    title: "Diagnóstico Contábil",
+    description: "Investigação minuciosa para mapear a posição empresarial, identificar gargalos operacionais e implementar inteligência gerencial.",
+    icon: <ClipboardList className="h-6 w-6" />,
+  },
   {
     id: "adequacao-reforma",
     title: "Adequação à Reforma",
@@ -12,26 +18,20 @@ const serviceCards: CardData[] = [
   {
     id: "recuperacao-creditos",
     title: "Recuperação de Créditos",
-    description: "Algoritmos avançados para identificação e resgate de ativos fiscais ocultos antes da transição de modelo tributário.",
+    description: "Algoritmos avançados para identificação e resgate de ativos fiscais ocultos e verbas previdenciárias indevidas.",
     icon: <Coins className="h-6 w-6" />,
   },
   {
-    id: "bpo-financeiro",
-    title: "BPO Financeiro 4.0",
-    description: "Terceirização digital completa. Dashboards em tempo real e conformidade automatizada com as novas regras fiscais.",
-    icon: <Layers className="h-6 w-6" />,
+    id: "agro-intelligence",
+    title: "Soluções para o Agro",
+    description: "Gestão técnica de LCDPR, ITR e planejamento para o produtor rural. Transformando a lida no campo em eficiência fiscal.",
+    icon: <Sprout className="h-6 w-6" />,
   },
   {
     id: "planejamento-estrategico",
     title: "Planejamento Estratégico",
-    description: "Navegação inteligente pelo período de transição (2026-2033). Otimização fiscal considerando o novo IVA Dual.",
+    description: "Engenharia societária para a menor carga tributária possível, alinhada à legislação vigente e tendências fiscais.",
     icon: <TrendingUp className="h-6 w-6" />,
-  },
-  {
-    id: "auditoria-inteligente",
-    title: "Auditoria Inteligente",
-    description: "Monitoramento contínuo via IA para prevenir riscos e garantir 100% de compliance com as obrigações acessórias.",
-    icon: <ShieldCheck className="h-6 w-6" />,
   },
 ];
 

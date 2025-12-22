@@ -34,12 +34,13 @@ export interface ChatMessage {
 }
 
 export interface UserData {
+  service: string; // Novo campo para o serviço selecionado
   documentType: 'CPF' | 'CNPJ' | '';
   documentValue: string;
   name: string;
   email: string;
   phone: string;
-  city: string; // Novo campo
+  city: string;
   company: string;
   revenue: string;
   regime: string;
