@@ -18,7 +18,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPrivacy, onSelectService, 
                Shigueme<span className="text-blue-500"> Consultoria Tributária</span>
              </a>
              <p className="text-sm mb-4">
-               Soluções inteligentes para contabilidade estratégica, compliance agro e planejamento tributário.
+               Soluções inteligentes para consultoria estratégica, compliance agro e planejamento tributário.
              </p>
           </div>
 
@@ -50,8 +50,8 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPrivacy, onSelectService, 
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectService('diagnostico-contabil')} className="hover:text-blue-400 transition-colors text-left">
-                  Diagnóstico Contábil
+                <button onClick={() => onSelectService('consultoria-contabil')} className="hover:text-blue-400 transition-colors text-left">
+                  Consultoria Contábil
                 </button>
               </li>
               <li>

@@ -144,7 +144,7 @@ export const AIAssistant: React.FC = () => {
     addBotMessage("Olá! Sou o seu assistente virtual. 🤖", 500);
     
     const serviceOptions: ChatOption[] = [
-        { label: 'Diagnóstico Contábil', value: 'diagnostico-contabil' },
+        { label: 'Consultoria Contábil', value: 'consultoria-contabil' },
         { label: 'Adequação à Reforma', value: 'adequacao-reforma' },
         { label: 'Recuperação de Créditos', value: 'recuperacao-creditos' },
         { label: 'Soluções para o Agro', value: 'agro-intelligence' },
@@ -202,7 +202,7 @@ export const AIAssistant: React.FC = () => {
     switch (currentStep) {
       case 'SERVICE_SELECTION':
         setUserData(prev => ({ ...prev, service: value }));
-        addBotMessage("Ótima escolha! Para prosseguirmos com o diagnóstico, qual é o seu nome completo?", 600, () => setCurrentStep('NAME'));
+        addBotMessage("Ótima escolha! Para prosseguirmos com a consultoria, qual é o seu nome completo?", 600, () => setCurrentStep('NAME'));
         break;
 
       case 'NAME':
@@ -292,7 +292,7 @@ export const AIAssistant: React.FC = () => {
             { label: 'Reduzir Impostos', value: 'reduzir_carga' },
             { label: 'Resolver Dívidas', value: 'dividas' },
             { label: 'Recup. Créditos', value: 'recuperacao_credito' },
-            { label: 'Diag. Contábil', value: 'diagnostico_contabil' },
+            { label: 'Cons. Contábil', value: 'consultoria_contabil' },
             { label: 'Reforma Tributária', value: 'reforma_tributaria' },
             { label: 'Outro', value: 'outro' },
         ];
@@ -342,7 +342,7 @@ export const AIAssistant: React.FC = () => {
         if (response.ok) {
             setCurrentStep('SUCCESS');
             addBotMessage("✅ Tudo certo! Recebemos sua solicitação.", 1000);
-            addBotMessage("Nossos especialistas em inteligência tributária entrarão em contato em breve pelo WhatsApp.", 2000);
+            addBotMessage("Nossos especialistas em consultoria tributária entrarão em contato em breve pelo WhatsApp.", 2000);
         } else {
             throw new Error(`Erro ${response.status}: ${response.statusText}`);
         }
@@ -403,7 +403,7 @@ export const AIAssistant: React.FC = () => {
              </div>
              <div>
                 <p className="text-xs text-slate-600 font-medium leading-tight">
-                  Olá, clique aqui e agende uma consulta!
+                  Olá, clique aqui e agende uma consultoria!
                 </p>
              </div>
              <button 

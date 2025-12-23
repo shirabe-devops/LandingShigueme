@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { IconCheck, IconTrendingUp, IconCalculator, IconCircleDollar, IconShield, IconChart, IconLayers } from './Icons';
 
@@ -22,8 +23,8 @@ export const Hero: React.FC = () => {
     "description": "Especialistas em Reforma Tributária, IVA Dual (IBS e CBS) e BPO Financeiro.",
     "address": {
       "@type": "PostalAddress",
-      "addressLocality": "São Paulo",
-      "addressRegion": "SP",
+      "addressLocality": "Paraná",
+      "addressRegion": "PR",
       "addressCountry": "BR"
     },
     "priceRange": "$$"
@@ -41,7 +42,7 @@ export const Hero: React.FC = () => {
         className="group relative w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold text-lg rounded-xl shadow-[0_0_30px_rgba(37,99,235,0.3)] hover:shadow-[0_0_50px_rgba(37,99,235,0.5)] transition-all overflow-hidden border border-blue-400/20 text-center"
       >
         <span className="relative z-10 flex items-center justify-center">
-          Agendar Diagnóstico
+          Agendar Consultoria
         </span>
         <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
       </button>
@@ -121,7 +122,7 @@ export const Hero: React.FC = () => {
 
             <p className={`${baseTransition} delay-[400ms] ${isVisible ? visibleState : hiddenState} text-lg text-slate-400 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0`}>
               Transforme a complexidade fiscal em vantagem competitiva. 
-              Auditoria, compliance e planejamento estratégico para maximizar seus lucros.
+              Auditoria, compliance e consultoria estratégica para maximizar seus lucros.
             </p>
 
             {/* DESKTOP BUTTONS (Hidden on mobile/tablet) */}

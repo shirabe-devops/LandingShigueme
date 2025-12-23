@@ -42,7 +42,7 @@ function App() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900 scroll-smooth">
       
-      {(currentPage === 'home' || currentPage === 'tax-management') && (
+      {(currentPage === 'home' || currentPage === 'tax-management' || currentPage === 'service-detail') && (
         <Navbar onNavigateAtuacao={navigateToTaxManagement} onNavigateHome={navigateToHome} />
       )}
 
@@ -78,15 +78,20 @@ function App() {
       )}
 
       {currentPage === 'service-detail' && selectedServiceId && (
-        <ServiceDetailPage 
-          serviceId={selectedServiceId} 
-          onBack={() => {
-            navigateToHome();
-            setTimeout(() => {
-              document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-          }} 
-        />
+        <>
+          <ServiceDetailPage 
+            serviceId={selectedServiceId} 
+            onBack={() => {
+              navigateToHome();
+              setTimeout(() => {
+                document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
+              }, 100);
+            }} 
+            onNavigateToService={navigateToService}
+          />
+          <Footer onOpenPrivacy={navigateToPrivacy} onSelectService={navigateToService} onSelectAtuacao={navigateToTaxManagement} />
+          <AIAssistant />
+        </>
       )}
     </div>
   );

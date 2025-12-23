@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { BarChart3, Coins, ClipboardList, TrendingUp, Sprout } from 'lucide-react';
@@ -22,12 +23,12 @@ interface Tab {
 
 const serviceTabs: Tab[] = [
   {
-    value: "diagnostico",
+    value: "consultoria",
     icon: <ClipboardList className="h-4 w-4 shrink-0" />,
-    label: "Diagnóstico",
+    label: "Consultoria",
     content: {
       badge: "Inteligência Gerencial",
-      title: "Diagnóstico Contábil e Financeiro",
+      title: "Consultoria Contábil e Financeira",
       description: "Investigação minuciosa para mapear a posição empresarial, identificar gargalos operacionais e implementar inteligência gerencial baseada em dados reais.",
       buttonText: "Ver Detalhes",
       imageSrc: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=800&auto=format&fit=crop",
@@ -42,7 +43,7 @@ const serviceTabs: Tab[] = [
       badge: "Transição 2026",
       title: "Prontos para a Reforma Tributária",
       description: "Prepare-se para o IBS e CBS. Realizamos análise preditiva de impacto da unificação tributária no seu ecossistema financeiro para os próximos anos.",
-      buttonText: "Solicitar Análise",
+      buttonText: "Ver Detalhes",
       imageSrc: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=800&auto=format&fit=crop",
       imageAlt: "Documentos fiscais e cálculos",
     },
@@ -55,7 +56,7 @@ const serviceTabs: Tab[] = [
       badge: "Recuperação de Ativos",
       title: "Recupere Ativos Fiscais Ocultos",
       description: "Algoritmos avançados para identificação e resgate de ativos fiscais ocultos e verbas previdenciárias indevidas diretamente na esfera administrativa.",
-      buttonText: "Simular Recuperação",
+      buttonText: "Ver Detalhes",
       imageSrc: "https://res.cloudinary.com/dw9ohxxgw/image/upload/v1766446882/istockphoto-1448519280-612x612_eeynpr.jpg",
       imageAlt: "Tecnologia financeira",
     },
@@ -68,7 +69,7 @@ const serviceTabs: Tab[] = [
       badge: "Soluções Rurais",
       title: "Excelência no Agronegócio",
       description: "Gestão técnica de LCDPR, ITR e planejamento para o produtor rural. Transformando a lida no campo em eficiência fiscal e sucessão familiar sólida.",
-      buttonText: "Consultoria Agro",
+      buttonText: "Ver Detalhes",
       imageSrc: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=800&auto=format&fit=crop",
       imageAlt: "Gestão de terras e agro",
     },
@@ -81,7 +82,7 @@ const serviceTabs: Tab[] = [
       badge: "Estratégia Societária",
       title: "Engenharia Tributária Estratégica",
       description: "Engenharia societária personalizada para garantir a menor carga tributária possível, sempre alinhada à legislação vigente e tendências fiscais.",
-      buttonText: "Falar com Especialista",
+      buttonText: "Ver Detalhes",
       imageSrc: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop",
       imageAlt: "Planejamento empresarial",
     },
@@ -153,7 +154,7 @@ export const Services: React.FC<ServicesProps> = ({ onSelectService }) => {
                       size="lg" 
                       onClick={() => {
                         const idMapping: Record<string, string> = {
-                          'diagnostico': 'diagnostico-contabil',
+                          'consultoria': 'consultoria-contabil',
                           'reforma': 'adequacao-reforma',
                           'creditos': 'recuperacao-creditos',
                           'agro': 'agro-intelligence',
