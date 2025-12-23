@@ -8,8 +8,8 @@ import {
   formatPhone 
 } from '../utils/validators';
 
-const N8N_WEBHOOK_URL = //'https://n8nwebhook.shirabe.com.br/webhook/lpshigueme';
-'https://n8n.shirabe.com.br/webhook-test/lpshigueme' 
+const N8N_WEBHOOK_URL = 'https://n8nwebhook.shirabe.com.br/webhook/lpshigueme';
+//'https://n8n.shirabe.com.br/webhook-test/lpshigueme' 
 
 type ChatStep = 
   | 'INTRO'
