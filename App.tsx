@@ -38,12 +38,31 @@ function App() {
     setSelectedServiceId(null);
     window.scrollTo(0, 0); 
   };
+
+  const navigateToSection = (sectionId: string) => {
+    if (currentPage !== 'home') {
+      setCurrentPage('home');
+      setSelectedServiceId(null);
+      // Pequeno delay para garantir que a Home renderizou antes de tentar o scroll
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        element?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      const element = document.getElementById(sectionId);
+      element?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900 scroll-smooth">
       
       {(currentPage === 'home' || currentPage === 'tax-management' || currentPage === 'service-detail') && (
-        <Navbar onNavigateAtuacao={navigateToTaxManagement} onNavigateHome={navigateToHome} />
+        <Navbar 
+          onNavigateAtuacao={navigateToTaxManagement} 
+          onNavigateHome={navigateToHome}
+          onNavigateSection={navigateToSection}
+        />
       )}
 
       {currentPage === 'home' && (
@@ -63,10 +82,7 @@ function App() {
         <>
           <TaxManagementPage 
             onBack={navigateToHome} 
-            onGoToServices={() => {
-              navigateToHome();
-              setTimeout(() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' }), 100);
-            }} 
+            onGoToServices={() => navigateToSection('services')} 
           />
           <Footer onOpenPrivacy={navigateToPrivacy} onSelectService={navigateToService} onSelectAtuacao={navigateToTaxManagement} />
           <AIAssistant />
@@ -81,12 +97,7 @@ function App() {
         <>
           <ServiceDetailPage 
             serviceId={selectedServiceId} 
-            onBack={() => {
-              navigateToHome();
-              setTimeout(() => {
-                document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
-              }, 100);
-            }} 
+            onBack={() => navigateToSection('services')} 
             onNavigateToService={navigateToService}
           />
           <Footer onOpenPrivacy={navigateToPrivacy} onSelectService={navigateToService} onSelectAtuacao={navigateToTaxManagement} />

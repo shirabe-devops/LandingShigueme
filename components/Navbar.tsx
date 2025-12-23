@@ -5,9 +5,10 @@ import { IconMenu, IconX } from './Icons';
 interface NavbarProps {
   onNavigateAtuacao?: () => void;
   onNavigateHome?: () => void;
+  onNavigateSection?: (id: string) => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onNavigateAtuacao, onNavigateHome }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onNavigateAtuacao, onNavigateHome, onNavigateSection }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const openChat = () => {
@@ -45,8 +46,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigateAtuacao, onNavigateHom
           <div className="hidden md:flex space-x-1 items-center">
             <button onClick={(e) => handleLinkClick(e, onNavigateHome)} className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200">Início</button>
             <button onClick={(e) => handleLinkClick(e, onNavigateAtuacao)} className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200">Área de Atuação</button>
-            <a href="#services" className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200">Serviços</a>
-            <a href="#about" className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200">Sobre Nós</a>
+            <button 
+              onClick={(e) => handleLinkClick(e, () => onNavigateSection?.('services'))} 
+              className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
+            >
+              Serviços
+            </button>
+            <button 
+              onClick={(e) => handleLinkClick(e, () => onNavigateSection?.('about'))} 
+              className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
+            >
+              Sobre Nós
+            </button>
             
             <div className="pl-4">
               <button 
@@ -91,20 +102,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigateAtuacao, onNavigateHom
           >
             Área de Atuação
           </button>
-          <a 
-            href="#services" 
-            onClick={() => setIsOpen(false)} 
-            className="block px-4 py-3 text-base font-medium text-slate-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors border-l-4 border-transparent hover:border-blue-500"
+          <button 
+            onClick={(e) => handleLinkClick(e, () => onNavigateSection?.('services'))} 
+            className="text-left block px-4 py-3 text-base font-medium text-slate-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors border-l-4 border-transparent hover:border-blue-500"
           >
             Serviços
-          </a>
-          <a 
-            href="#about" 
-            onClick={() => setIsOpen(false)} 
-            className="block px-4 py-3 text-base font-medium text-slate-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors border-l-4 border-transparent hover:border-blue-500"
+          </button>
+          <button 
+            onClick={(e) => handleLinkClick(e, () => onNavigateSection?.('about'))} 
+            className="text-left block px-4 py-3 text-base font-medium text-slate-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors border-l-4 border-transparent hover:border-blue-500"
           >
             Sobre Nós
-          </a>
+          </button>
           <div className="pt-4 mt-2 border-t border-white/10">
             <button 
               onClick={openChat} 
