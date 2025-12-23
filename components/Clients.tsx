@@ -53,8 +53,8 @@ const ClientLogo: React.FC<{ name: string; logo: string }> = ({ name, logo }) =>
             src={logo} 
             alt={`Logo ${name}`} 
             className="
-              h-16                     /* Altura da imagem no Mobile */
-              md:h-24                  /* Altura da imagem no Desktop */
+              h-17                     /* Altura da imagem no Mobile */
+              md:h-25                  /* Altura da imagem no Desktop */
               max-w-[140px]            /* Largura máxima */
               md:max-w-[180px] 
               object-contain           /* Não distorce a imagem */
