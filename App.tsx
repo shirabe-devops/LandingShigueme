@@ -40,6 +40,11 @@ function App() {
   };
 
   const navigateToSection = (sectionId: string) => {
+    if (sectionId === 'home') {
+      navigateToHome();
+      return;
+    }
+
     if (currentPage !== 'home') {
       setCurrentPage('home');
       setSelectedServiceId(null);
@@ -73,7 +78,12 @@ function App() {
             <Services onSelectService={navigateToService} />
             <About />
           </main>
-          <Footer onOpenPrivacy={navigateToPrivacy} onSelectService={navigateToService} onSelectAtuacao={navigateToTaxManagement} />
+          <Footer 
+            onOpenPrivacy={navigateToPrivacy} 
+            onSelectService={navigateToService} 
+            onSelectAtuacao={navigateToTaxManagement} 
+            onNavigateSection={navigateToSection}
+          />
           <AIAssistant />
         </>
       )}
@@ -84,7 +94,12 @@ function App() {
             onBack={navigateToHome} 
             onGoToServices={() => navigateToSection('services')} 
           />
-          <Footer onOpenPrivacy={navigateToPrivacy} onSelectService={navigateToService} onSelectAtuacao={navigateToTaxManagement} />
+          <Footer 
+            onOpenPrivacy={navigateToPrivacy} 
+            onSelectService={navigateToService} 
+            onSelectAtuacao={navigateToTaxManagement} 
+            onNavigateSection={navigateToSection}
+          />
           <AIAssistant />
         </>
       )}
@@ -100,7 +115,12 @@ function App() {
             onBack={() => navigateToSection('services')} 
             onNavigateToService={navigateToService}
           />
-          <Footer onOpenPrivacy={navigateToPrivacy} onSelectService={navigateToService} onSelectAtuacao={navigateToTaxManagement} />
+          <Footer 
+            onOpenPrivacy={navigateToPrivacy} 
+            onSelectService={navigateToService} 
+            onSelectAtuacao={navigateToTaxManagement} 
+            onNavigateSection={navigateToSection}
+          />
           <AIAssistant />
         </>
       )}
