@@ -21,15 +21,14 @@ export const Hero: React.FC<HeroProps> = ({ onNavigateSection }) => {
           </div>
           
           <h1 className="text-5xl md:text-7xl font-bold text-slate-900 mb-6 tracking-tight leading-tight">
-            Soluções ágeis, <br className="hidden md:block" />
+            Menos imposto. <br className="hidden md:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-              experiências premium.
+              Mais resultado.
             </span>
           </h1>
           
           <p className="text-xl md:text-2xl text-slate-600 mb-10 max-w-3xl mx-auto leading-relaxed">
-            Transformamos a complexidade tributária em tranquilidade e resultados. 
-            Mais conveniência para você focar no crescimento do seu negócio.
+            Descomplicamos sua gestão tributária para você focar no que importa: o crescimento do seu negócio.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -43,7 +42,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigateSection }) => {
               onClick={() => window.dispatchEvent(new CustomEvent('open-chat'))}
               className="w-full sm:w-auto px-8 py-4 rounded-full bg-white text-slate-900 font-medium hover:bg-slate-50 transition-all border border-slate-200 shadow-sm flex items-center justify-center gap-2"
             >
-              Fale com um especialista
+              Falar com especialista
             </button>
           </div>
         </div>
@@ -54,7 +53,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigateSection }) => {
               <Zap className="w-7 h-7" />
             </div>
             <h3 className="text-xl font-bold text-slate-900 mb-3">Agilidade</h3>
-            <p className="text-slate-600">Respostas rápidas e execuções eficientes para as demandas fiscais do seu negócio.</p>
+            <p className="text-slate-600">Respostas rápidas e execuções diretas ao ponto. Sem enrolação.</p>
           </div>
           
           <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm text-center flex flex-col items-center">
@@ -62,7 +61,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigateSection }) => {
               <Sparkles className="w-7 h-7" />
             </div>
             <h3 className="text-xl font-bold text-slate-900 mb-3">Conveniência</h3>
-            <p className="text-slate-600">Assumimos a complexidade burocrática para entregar soluções prontas e fáceis de aplicar.</p>
+            <p className="text-slate-600">Nós assumimos a burocracia. Você recebe as soluções prontas na mão.</p>
           </div>
           
           <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm text-center flex flex-col items-center">
@@ -70,7 +69,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigateSection }) => {
               <ShieldCheck className="w-7 h-7" />
             </div>
             <h3 className="text-xl font-bold text-slate-900 mb-3">Segurança</h3>
-            <p className="text-slate-600">Tranquilidade e compliance total com foco na proteção do seu patrimônio e empresa.</p>
+            <p className="text-slate-600">Blindagem fiscal e compliance total para proteger o seu patrimônio.</p>
           </div>
         </div>
       </div>

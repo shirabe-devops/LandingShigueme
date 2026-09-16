@@ -36,13 +36,13 @@ export const About: React.FC = () => {
             
             <div className="prose prose-lg text-slate-600">
               <p className="mb-6">
-                Na <strong>Shigueme Consultoria Tributária</strong>, acreditamos que lidar com impostos não precisa ser um obstáculo diário para o empresário. Nossa missão é oferecer <strong>soluções completas e experiências premium</strong> que tirem o peso da burocracia dos seus ombros.
+                Lidar com impostos não deve travar o seu dia a dia. A <strong>Shigueme Consultoria Tributária</strong> une inteligência de dados e atendimento premium para simplificar sua vida empresarial.
               </p>
               <p className="mb-6">
-                Combinamos inteligência de dados com um atendimento consultivo para criar estratégias que não apenas mantêm sua empresa em total conformidade, mas também geram caixa e eficiência. Desde a transição pacífica para o <strong>IVA Dual</strong> até a estruturação inteligente do agronegócio.
+                Mais do que manter sua empresa em conformidade, nós entregamos eficiência, recuperação de caixa e segurança para o futuro (incluindo a transição sem sustos para a nova <strong>Reforma Tributária</strong>).
               </p>
               <p>
-                Entregamos mais que planilhas e relatórios: entregamos conveniência. Você foca na sua paixão e no crescimento do seu negócio, enquanto nós cuidamos da sua segurança fiscal com agilidade e excelência.
+                Nosso papel é assumir a burocracia pesada. O seu é continuar crescendo.
               </p>
             </div>
           </div>

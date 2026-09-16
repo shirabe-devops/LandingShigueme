@@ -27,7 +27,7 @@ const SERVICE_DETAILS: Record<string, ServiceDetail> = {
     shortTitle: 'Reforma Tributária',
     subtitle: 'Navegamos pela complexidade para você focar no que importa.',
     description: 'Sua empresa pronta para o novo IVA Dual (IBS e CBS) com total segurança e conveniência.',
-    longDescription: 'A adequação à Reforma Tributária não precisa ser uma dor de cabeça. Nós cuidamos de toda a transição do antigo sistema (PIS, COFINS, IPI, ICMS, ISS) para o novo formato, analisando o impacto nos seus preços, custos e margens. Entregamos soluções prontas, garantindo que você tenha a melhor experiência e tranquilidade durante esta mudança histórica.',
+    longDescription: '• Sua empresa pronta para a Reforma Tributária, sem dor de cabeça.\n• Cuidamos da transição para o novo IVA Dual (IBS e CBS).\n• Analisamos o impacto nos seus preços, custos e margens.\n• Você recebe a estratégia pronta para aplicar.',
     icon: <BarChart3 className="h-6 w-6 md:h-12 md:w-12" />,
     color: 'indigo'
   },
@@ -37,7 +37,7 @@ const SERVICE_DETAILS: Record<string, ServiceDetail> = {
     shortTitle: 'Recuperação de Créditos',
     description: 'Uma solução inteligente para recuperar valores e fortalecer seu capital de giro.',
     subtitle: 'Identificamos oportunidades ocultas no seu histórico.',
-    longDescription: 'Através de tecnologia e análise profunda, auditamos as bases de cálculo dos seus tributos passados para identificar pagamentos indevidos. O processo é totalmente conduzido por nossa equipe, exigindo o mínimo de esforço da sua parte. O resultado é a recuperação ágil de créditos, trazendo fôlego financeiro imediato para sua empresa.',
+    longDescription: '• Recuperamos impostos pagos a maior de forma 100% administrativa.\n• Auditoria rápida cruzando dados via inteligência artificial.\n• Zero esforço da sua equipe.\n• Fôlego financeiro imediato no seu caixa.',
     icon: <Coins className="h-6 w-6 md:h-12 md:w-12" />,
     color: 'emerald'
   },
@@ -47,7 +47,7 @@ const SERVICE_DETAILS: Record<string, ServiceDetail> = {
     shortTitle: 'Consultoria Contábil',
     description: 'Simplificamos seus números para que você tenha o controle total do seu negócio.',
     subtitle: 'Clareza e precisão para decisões mais seguras.',
-    longDescription: 'Transformamos dados complexos em painéis intuitivos e recomendações práticas. Nossa consultoria vai além dos números: diagnosticamos gargalos, sugerimos melhorias em processos e implementamos ferramentas tecnológicas que trazem eficiência e conveniência para o seu dia a dia. Você ganha tempo e segurança para liderar.',
+    longDescription: '• Seus números traduzidos em painéis intuitivos.\n• Diagnóstico rápido de gargalos financeiros e de processos.\n• Implementação de tecnologias que trazem eficiência.\n• Mais tempo livre para você focar na liderança do negócio.',
     icon: <ClipboardList className="h-6 w-6 md:h-12 md:w-12" />,
     color: 'blue'
   },
@@ -57,7 +57,7 @@ const SERVICE_DETAILS: Record<string, ServiceDetail> = {
     shortTitle: 'Soluções Agro',
     description: 'Cuidamos da sua conformidade fiscal para você focar na sua safra.',
     subtitle: 'Proteção e eficiência para o produtor rural.',
-    longDescription: 'O agronegócio exige soluções específicas e ágeis. Nossa equipe cuida de obrigações como o Livro Caixa Digital do Produtor Rural (LCDPR), gestão do ITR e planejamento para exportações, garantindo que você aproveite todos os benefícios fiscais disponíveis. Uma experiência sem burocracia, pensada para trazer paz de espírito ao produtor.',
+    longDescription: '• Soluções específicas e ágeis para o Agronegócio.\n• Gestão completa do ITR e Livro Caixa Digital do Produtor Rural (LCDPR).\n• Estratégia dedicada para exportações e incentivos setoriais.\n• Burocracia blindada, paz de espírito no campo.',
     icon: <Sprout className="h-6 w-6 md:h-12 md:w-12" />,
     color: 'teal'
   },
@@ -67,7 +67,7 @@ const SERVICE_DETAILS: Record<string, ServiceDetail> = {
     shortTitle: 'Plan. Estratégico',
     description: 'Desenhamos o melhor caminho para otimizar seus tributos de forma legal e segura.',
     subtitle: 'A estrutura ideal para o seu momento de vida e negócio.',
-    longDescription: 'Cada negócio é único, e sua carga tributária também deve ser. Mapeamos sua estrutura atual e desenhamos cenários personalizados, escolhendo os regimes e benefícios fiscais mais adequados. Entregamos um planejamento claro e prático, focado em trazer eficiência financeira com total conveniência.',
+    longDescription: '• Redução legal e segura da sua carga tributária.\n• Mapeamento da sua estrutura societária atual.\n• Simulação de cenários: Simples, Lucro Presumido ou Real.\n• Economia real, baseada puramente na lei e na sua realidade.',
     icon: <TrendingUp className="h-6 w-6 md:h-12 md:w-12" />,
     color: 'violet'
   }
@@ -165,7 +165,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ serviceId,
                   
                   <div className="mt-10 pt-8 flex items-center justify-center md:justify-start gap-4">
                      <button 
-                       onClick={() => window.dispatchEvent(new CustomEvent('open-chat'))}
+                       onClick={() => window.dispatchEvent(new CustomEvent('open-chat', { detail: { serviceId: detail.id, serviceName: detail.title } }))}
                        className="px-8 py-4 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors shadow-lg hover:shadow-xl flex items-center gap-2"
                      >
                        Conversar sobre esta solução <ArrowRight className="w-5 h-5" />

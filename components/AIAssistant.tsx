@@ -99,10 +99,18 @@ export const AIAssistant: React.FC = () => {
   }, [messages, isTyping, currentStep, isOpen]);
 
   useEffect(() => {
-    const handleOpenChat = () => {
+    const handleOpenChat = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const initialServiceId = customEvent.detail?.serviceId;
+      const initialServiceName = customEvent.detail?.serviceName;
+
       setIsOpen(true);
       setShowNotification(false);
-      if (!hasOpened) {
+      
+      if (initialServiceId) {
+        setHasOpened(true);
+        startConversationWithService(initialServiceId, initialServiceName);
+      } else if (!hasOpened) {
           setHasOpened(true);
           startConversation();
       }
@@ -138,9 +146,37 @@ export const AIAssistant: React.FC = () => {
     }
   }, [isTyping, currentStep, isOpen]);
 
+  const startConversationWithService = (serviceId: string, serviceName: string) => {
+    setMessages([]);
+    setCurrentStep('NAME');
+    setUserData(prev => ({ ...prev, service: serviceId }));
+    
+    // Simulate initial bot intro
+    setMessages([{
+      id: Date.now().toString() + '-1',
+      role: 'bot',
+      content: "Olá! Aqui é da Shigueme Consultoria. 👋",
+      type: 'text'
+    }]);
+
+    // Simulate user selecting the service and bot responding
+    setTimeout(() => {
+      setMessages(prev => [
+        ...prev, 
+        {
+          id: Date.now().toString() + '-2',
+          role: 'user',
+          content: `Quero saber sobre: ${serviceName}`,
+          type: 'text'
+        }
+      ]);
+      addBotMessage("Ótima escolha! Para agilizarmos, como posso te chamar?", 600);
+    }, 500);
+  };
+
   const startConversation = () => {
     setMessages([]);
-    addBotMessage("Olá! Sou o seu assistente virtual. 🤖", 500);
+    addBotMessage("Olá! Aqui é da Shigueme Consultoria. 👋", 500);
     
     const serviceOptions: ChatOption[] = [
         { label: 'Consultoria Contábil', value: 'consultoria-contabil' },
@@ -150,7 +186,7 @@ export const AIAssistant: React.FC = () => {
         { label: 'Planejamento Estratégico', value: 'planejamento-estrategico' },
     ];
 
-    addBotMessage("Para começarmos, qual desses serviços você está buscando hoje?", 1500, () => setCurrentStep('SERVICE_SELECTION'), serviceOptions);
+    addBotMessage("Como podemos ajudar a sua empresa hoje?", 1500, () => setCurrentStep('SERVICE_SELECTION'), serviceOptions);
   };
 
   const addBotMessage = (text: string, delay: number = 0, callback?: () => void, options?: ChatOption[]) => {
@@ -201,11 +237,11 @@ export const AIAssistant: React.FC = () => {
     switch (currentStep) {
       case 'SERVICE_SELECTION':
         setUserData(prev => ({ ...prev, service: value }));
-        addBotMessage("Ótima escolha! Para prosseguirmos com a consultoria, qual é o seu nome completo?", 600, () => setCurrentStep('NAME'));
+        addBotMessage("Ótima escolha! Para agilizarmos, como posso te chamar?", 600, () => setCurrentStep('NAME'));
         break;
 
       case 'NAME':
-        if (cleanValue.length < 3 || cleanValue.split(' ').length < 2) {
+        if (cleanValue.length < 3) {
             addBotMessage("Por favor, digite seu nome e sobrenome.", 500);
             return;
         }
@@ -215,7 +251,7 @@ export const AIAssistant: React.FC = () => {
 
       case 'COMPANY':
         setUserData(prev => ({ ...prev, company: cleanValue }));
-        addBotMessage("Agora, qual é o seu melhor e-mail corporativo?", 600, () => setCurrentStep('EMAIL'));
+        addBotMessage("E qual o seu melhor e-mail?", 600, () => setCurrentStep('EMAIL'));
         break;
 
       case 'EMAIL':
@@ -225,7 +261,7 @@ export const AIAssistant: React.FC = () => {
             return;
         }
         setUserData(prev => ({ ...prev, email: cleanValue.toLowerCase() }));
-        addBotMessage("Qual seu WhatsApp (DDD + 9 dígitos)?", 600, () => setCurrentStep('PHONE'));
+        addBotMessage("Qual seu WhatsApp (com DDD)?", 600, () => setCurrentStep('PHONE'));
         break;
 
       case 'PHONE':
@@ -235,7 +271,7 @@ export const AIAssistant: React.FC = () => {
             return;
         }
         setUserData(prev => ({ ...prev, phone: formatPhone(cleanValue) }));
-        addBotMessage("Qual a sua cidade e estado (ex: Maringá - PR)?", 600, () => setCurrentStep('CITY'));
+        addBotMessage("De qual cidade/estado você fala?", 600, () => setCurrentStep('CITY'));
         break;
 
       case 'CITY':
@@ -266,7 +302,7 @@ export const AIAssistant: React.FC = () => {
             { label: 'Lucro Real', value: 'lucro_real' },
             { label: 'Não sei / Abertura', value: 'naosei_abertura' },
         ];
-        addBotMessage("Qual o Regime Tributário atual?", 600, () => setCurrentStep('REGIME'), regimeOptions);
+        addBotMessage("E o Regime Tributário atual?", 600, () => setCurrentStep('REGIME'), regimeOptions);
         break;
 
       case 'REGIME':
@@ -281,7 +317,7 @@ export const AIAssistant: React.FC = () => {
             { label: 'Saúde', value: 'saude' },
             { label: 'Outro', value: 'outro' },
         ];
-        addBotMessage("Qual é o setor de atuação principal?", 600, () => setCurrentStep('SECTOR'), sectorOptions);
+        addBotMessage("Em qual setor vocês atuam?", 600, () => setCurrentStep('SECTOR'), sectorOptions);
         break;
 
       case 'SECTOR':
@@ -295,13 +331,13 @@ export const AIAssistant: React.FC = () => {
             { label: 'Reforma Tributária', value: 'reforma_tributaria' },
             { label: 'Outro', value: 'outro' },
         ];
-        addBotMessage("Qual o seu maior objetivo hoje?", 600, () => setCurrentStep('MAIN_NEED'), needOptions);
+        addBotMessage("Qual é o principal desafio hoje?", 600, () => setCurrentStep('MAIN_NEED'), needOptions);
         break;
 
       case 'MAIN_NEED':
         if (value === 'outro') {
           setUserData(prev => ({ ...prev, mainNeed: value }));
-          addBotMessage("Para finalizar, descreva brevemente como podemos ajudar.", 600, () => setCurrentStep('MESSAGE'));
+          addBotMessage("Pode me dar um breve contexto do que você precisa?", 600, () => setCurrentStep('MESSAGE'));
         } else {
           // Se não for "Outro", finaliza imediatamente
           const finalData = { ...userData, mainNeed: value, message: `Desafio selecionado via menu: ${value}` };
@@ -340,8 +376,8 @@ export const AIAssistant: React.FC = () => {
 
         if (response.ok) {
             setCurrentStep('SUCCESS');
-            addBotMessage("✅ Tudo certo! Recebemos sua solicitação.", 1000);
-            addBotMessage("Nossos especialistas em consultoria tributária entrarão em contato em breve pelo WhatsApp.", 2000);
+            addBotMessage("✅ Tudo anotado!", 1000);
+            addBotMessage("Nossa equipe vai analisar e te chamar rapidinho no WhatsApp. Até logo!", 2000);
         } else {
             throw new Error(`Erro ${response.status}: ${response.statusText}`);
         }
