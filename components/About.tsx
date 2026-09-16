@@ -16,18 +16,6 @@ export const About: React.FC = () => {
                alt="Equipe prestando consultoria em um ambiente de negócios moderno" 
                className="relative z-10 rounded-3xl shadow-lg w-full h-auto object-cover"
              />
-             
-             <div className="absolute bottom-8 right-8 z-20 bg-white p-6 rounded-2xl shadow-xl max-w-xs hidden md:block border border-slate-100">
-               <div className="flex items-center gap-3 mb-2">
-                 <div className="flex -space-x-2">
-                    <div className="w-8 h-8 rounded-full bg-slate-100 border-2 border-white flex items-center justify-center text-xs font-bold text-slate-700">JD</div>
-                    <div className="w-8 h-8 rounded-full bg-blue-100 border-2 border-white flex items-center justify-center text-xs font-bold text-blue-700">AM</div>
-                    <div className="w-8 h-8 rounded-full bg-slate-100 border-2 border-white flex items-center justify-center text-xs text-slate-500">+5</div>
-                 </div>
-               </div>
-               <p className="text-slate-900 font-bold text-sm">Experiência que transforma</p>
-               <p className="text-slate-600 text-xs mt-1">Sua conveniência em primeiro lugar.</p>
-             </div>
           </div>
           
           <div>
@@ -36,7 +24,7 @@ export const About: React.FC = () => {
             
             <div className="prose prose-lg text-slate-600">
               <p className="mb-6">
-                Lidar com impostos não deve travar o seu dia a dia. A <strong>Shigueme Consultoria Tributária</strong> une inteligência de dados e atendimento premium para simplificar sua vida empresarial.
+                Lidar com impostos não deve travar o seu dia a dia. A <strong>Shigueme Consultoria Tributária</strong> une inteligência de dados e atendimento personalizado para simplificar sua vida empresarial.
               </p>
               <p className="mb-6">
                 Mais do que manter sua empresa em conformidade, nós entregamos eficiência, recuperação de caixa e segurança para o futuro (incluindo a transição sem sustos para a nova <strong>Reforma Tributária</strong>).

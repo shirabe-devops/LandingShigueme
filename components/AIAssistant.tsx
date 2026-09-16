@@ -8,7 +8,7 @@ import {
   formatPhone 
 } from '../utils/validators';
 
-const N8N_WEBHOOK_URL = 'https://n8n.shirabe.com.br/webhook/lpshigueme';
+const N8N_WEBHOOK_URL = 'https://n8n.shirabe.com.br/webhook-test/lpshigueme';
 //teste 'https://n8n.shirabe.com.br/webhook-test/lpshigueme' 
 
 type ChatStep = 
@@ -155,7 +155,7 @@ export const AIAssistant: React.FC = () => {
     setMessages([{
       id: Date.now().toString() + '-1',
       role: 'bot',
-      content: "Olá! Aqui é da Shigueme Consultoria. 👋",
+      content: "Olá! Tudo bem? Que bom ter você por aqui. 👋",
       type: 'text'
     }]);
 
@@ -170,13 +170,13 @@ export const AIAssistant: React.FC = () => {
           type: 'text'
         }
       ]);
-      addBotMessage("Ótima escolha! Para agilizarmos, como posso te chamar?", 600);
+      addBotMessage("Excelente! Vamos resolver isso juntos. Para a gente conversar melhor, como posso te chamar?", 600);
     }, 500);
   };
 
   const startConversation = () => {
     setMessages([]);
-    addBotMessage("Olá! Aqui é da Shigueme Consultoria. 👋", 500);
+    addBotMessage("Olá! Tudo bem? Que bom ter você por aqui. 👋", 500);
     
     const serviceOptions: ChatOption[] = [
         { label: 'Consultoria Contábil', value: 'consultoria-contabil' },
@@ -186,7 +186,7 @@ export const AIAssistant: React.FC = () => {
         { label: 'Planejamento Estratégico', value: 'planejamento-estrategico' },
     ];
 
-    addBotMessage("Como podemos ajudar a sua empresa hoje?", 1500, () => setCurrentStep('SERVICE_SELECTION'), serviceOptions);
+    addBotMessage("Como posso simplificar o dia a dia da sua empresa hoje?", 1500, () => setCurrentStep('SERVICE_SELECTION'), serviceOptions);
   };
 
   const addBotMessage = (text: string, delay: number = 0, callback?: () => void, options?: ChatOption[]) => {
@@ -386,7 +386,7 @@ export const AIAssistant: React.FC = () => {
         console.error("Erro envio chat:", error);
         setCurrentStep('ERROR');
         addBotMessage("Ops! Houve um erro de conexão.", 1000);
-        addBotMessage("Por favor, tente nos chamar diretamente no WhatsApp pelo botão no rodapé.", 2000);
+        addBotMessage("Por favor, tente novamente mais tarde.", 2000);
     }
   };
 
@@ -438,7 +438,7 @@ export const AIAssistant: React.FC = () => {
              </div>
              <div>
                 <p className="text-xs text-slate-600 font-medium leading-tight">
-                  Olá, clique aqui e agende uma consultoria!
+                  Olá! 👋 Quer reduzir impostos e burocracia na sua empresa? Fale com a gente.
                 </p>
              </div>
              <button 

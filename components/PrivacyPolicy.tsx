@@ -94,6 +94,13 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
               <p>
                 Os materiais no site da Shigueme Consultoria Tributária são fornecidos 'como estão'. Shigueme Consultoria Tributária não oferece garantias, expressas ou implícitas, e, por este meio, isenta e nega todas as outras garantias, incluindo, sem limitação, garantias implícitas ou condições de comercialização, adequação a um fim específico ou não violação de propriedade intelectual ou outra violação de direitos.
               </p>
+
+              <h3 className="text-lg font-bold text-slate-800 mt-6 mb-2">Aviso Legal sobre Serviços Consultivos</h3>
+              <div className="bg-white p-6 rounded-2xl border-l-4 border-l-blue-600 border border-slate-200 shadow-sm mt-4 mb-6">
+                <p className="text-slate-700 m-0 font-medium leading-relaxed">
+                  Todo serviço e produto consultivo está passível de falhas, erros e particularidades mercadológicas. A identificação de oportunidades (como a recuperação de créditos) depende exclusivamente do histórico de cada empresa, podendo ocorrer também a não recuperação de valores ou o não sucesso da estratégia em alguns casos. Alinhamos sempre as expectativas com transparência antes de qualquer execução.
+                </p>
+              </div>
               
               <h3 className="text-lg font-bold text-slate-800 mt-6 mb-2">Modificações</h3>
               <p>

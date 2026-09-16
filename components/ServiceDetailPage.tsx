@@ -37,7 +37,7 @@ const SERVICE_DETAILS: Record<string, ServiceDetail> = {
     shortTitle: 'Recuperação de Créditos',
     description: 'Uma solução inteligente para recuperar valores e fortalecer seu capital de giro.',
     subtitle: 'Identificamos oportunidades ocultas no seu histórico.',
-    longDescription: '• Recuperamos impostos pagos a maior de forma 100% administrativa.\n• Auditoria rápida cruzando dados via inteligência artificial.\n• Zero esforço da sua equipe.\n• Fôlego financeiro imediato no seu caixa.',
+    longDescription: '• Recuperação de impostos de forma 100% administrativa.\n• Auditoria minuciosa cruzando dados contábeis e fiscais.\n• Atuação focada em gerar fôlego financeiro imediato.',
     icon: <Coins className="h-6 w-6 md:h-12 md:w-12" />,
     color: 'emerald'
   },
