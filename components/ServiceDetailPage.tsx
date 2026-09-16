@@ -1,6 +1,7 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BarChart3, Coins, ClipboardList, TrendingUp, Sprout, ArrowLeft, ArrowRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface ServiceDetailPageProps {
   serviceId: string;
@@ -72,115 +73,111 @@ const SERVICE_DETAILS: Record<string, ServiceDetail> = {
   }
 };
 
-export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ serviceId, onBack, onNavigateToService }) => {
+export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ serviceId, onNavigateToService }) => {
   const detail = SERVICE_DETAILS[serviceId];
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [serviceId]);
 
   if (!detail) return null;
 
-  const otherServices = Object.values(SERVICE_DETAILS).filter(s => s.id !== serviceId);
-
   return (
-    <div id="services" className="bg-slate-50 text-slate-900 font-sans pb-10">
-      {/* Unified Hero & Content Section */}
-      <section className="relative pt-20 pb-20 px-4 overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
-          <div className={`absolute top-[-20%] right-[-10%] w-[60%] h-[60%] bg-${detail.color}-100/50 rounded-full blur-[120px]`}></div>
-          <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-100/50 rounded-full blur-[120px]"></div>
+    <div id="services" className="bg-slate-50 text-slate-900 font-sans py-24 relative overflow-hidden">
+      {/* Background Decorative Glow */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] right-[-5%] w-[40%] h-[40%] bg-blue-100/50 rounded-full blur-[120px]"></div>
+        <div className="absolute bottom-[-10%] left-[-5%] w-[30%] h-[30%] bg-indigo-100/50 rounded-full blur-[120px]"></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="mb-12 md:text-center max-w-3xl mx-auto">
+          <h2 className="text-blue-600 font-semibold tracking-wide uppercase text-sm mb-3">Nossas Soluções</h2>
+          <h3 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Descubra como podemos transformar seu negócio.</h3>
+          <p className="text-slate-600 text-lg">Selecione uma de nossas especialidades abaixo e veja os detalhes de cada solução.</p>
         </div>
 
-        <div className="max-w-4xl mx-auto relative z-10">
-          {onBack && (
-            <button 
-              onClick={onBack}
-              className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors mb-12 group"
-            >
-              <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-              <span>Voltar para Início</span>
-            </button>
-          )}
-
-          <div className="bg-white border border-slate-200 p-8 md:p-12 rounded-[2.5rem] shadow-sm">
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-10">
-              <div className={`p-6 rounded-3xl bg-${detail.color}-50 text-${detail.color}-600 shrink-0`}>
-                {detail.icon}
-              </div>
-              <div className="text-center md:text-left">
-                <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4 tracking-tight">
-                  {detail.title}
-                </h1>
-                <p className={`text-xl font-medium text-${detail.color}-600 mb-4`}>
-                  {detail.subtitle}
-                </p>
-                <p className="text-slate-600 text-lg leading-relaxed">
-                  {detail.description}
-                </p>
-              </div>
-            </div>
-
-            <div className="pt-8 border-t border-slate-100">
-              <div className="prose prose-lg max-w-none text-slate-600 leading-relaxed">
-                <p className="whitespace-pre-line">
-                  {detail.longDescription}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Modern Service Navigator */}
-      <section className="py-12 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between mb-10 gap-4">
-             <div>
-                <h3 className="text-2xl font-bold text-slate-900">Explorar mais soluções</h3>
-                <p className="text-slate-500 text-sm">Descubra como podemos simplificar o seu dia a dia</p>
-             </div>
-             {onBack && (
-               <button 
-                  onClick={onBack}
-                  className="text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center gap-1 group"
-               >
-                  Ver todos na Home <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-               </button>
-             )}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+          
+          {/* Sidebar Navigation */}
+          <div className="lg:col-span-4 flex lg:flex-col overflow-x-auto lg:overflow-visible gap-3 pb-4 lg:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            {Object.values(SERVICE_DETAILS).map((service) => {
+              const isActive = service.id === detail.id;
+              return (
+                <button
+                  key={service.id}
+                  onClick={() => onNavigateToService?.(service.id)}
+                  className={`flex-shrink-0 flex items-center gap-4 p-4 rounded-2xl border transition-all text-left w-72 lg:w-full ${
+                    isActive 
+                      ? 'bg-slate-900 border-slate-900 text-white shadow-xl lg:translate-x-4'
+                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-blue-300'
+                  }`}
+                >
+                  <div className={`p-3 rounded-xl transition-colors ${isActive ? 'bg-white/20 text-white' : `bg-${service.color}-50 text-${service.color}-600`}`}>
+                    {React.cloneElement(service.icon as React.ReactElement<{ className?: string }>, { className: 'w-6 h-6' })}
+                  </div>
+                  <div>
+                    <h4 className={`font-bold text-sm mb-0.5 transition-colors ${isActive ? 'text-white' : 'text-slate-900'}`}>
+                      {service.shortTitle}
+                    </h4>
+                    <p className={`text-xs line-clamp-1 transition-colors ${isActive ? 'text-white/80' : 'text-slate-500'}`}>
+                      {service.title}
+                    </p>
+                  </div>
+                </button>
+              );
+            })}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {otherServices.map((service) => (
-              <button
-                key={service.id}
-                onClick={() => onNavigateToService?.(service.id)}
-                className="relative group bg-white border border-slate-200 p-6 rounded-2xl hover:border-blue-300 hover:shadow-md transition-all text-left overflow-hidden"
+          {/* Main Content Area */}
+          <div className="lg:col-span-8">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={detail.id}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                className="bg-white border border-slate-200 p-8 md:p-12 rounded-[2.5rem] shadow-xl w-full relative overflow-hidden"
               >
-                {/* Glow Effect */}
-                <div className={`absolute -right-4 -top-4 w-20 h-20 bg-${service.color}-100 rounded-full blur-2xl transition-all`}></div>
-                
-                <div className={`mb-4 text-${service.color}-600 group-hover:scale-110 transition-transform origin-left relative z-10`}>
-                   {/* Fix: Casting React.ReactNode to React.ReactElement with className prop to satisfy TypeScript */}
-                   {React.cloneElement(service.icon as React.ReactElement<{ className?: string }>, { className: 'w-6 h-6' })}
-                </div>
-                
-                <h4 className="font-bold text-slate-900 text-sm mb-2 group-hover:text-blue-600 transition-colors relative z-10">
-                  {service.shortTitle}
-                </h4>
-                
-                <p className="text-slate-500 text-[11px] leading-tight line-clamp-2 relative z-10">
-                  {service.description}
-                </p>
+                {/* Internal Glow for Content Card */}
+                <div className={`absolute -right-20 -top-20 w-64 h-64 bg-${detail.color}-100/60 rounded-full blur-[80px] pointer-events-none transition-colors duration-700`}></div>
 
-                <div className="mt-4 flex items-center gap-2 text-[10px] font-bold text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity relative z-10">
-                  SAIBA MAIS <ArrowRight className="w-3 h-3" />
+                <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-10 relative z-10">
+                  <div className={`p-6 rounded-3xl bg-${detail.color}-50 text-${detail.color}-600 shrink-0`}>
+                    {React.cloneElement(detail.icon as React.ReactElement<{ className?: string }>, { className: 'w-10 h-10 md:w-12 md:h-12' })}
+                  </div>
+                  <div className="text-center md:text-left">
+                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4 tracking-tight">
+                      {detail.title}
+                    </h1>
+                    <p className={`text-lg md:text-xl font-medium text-${detail.color}-600 mb-4`}>
+                      {detail.subtitle}
+                    </p>
+                    <p className="text-slate-600 text-lg leading-relaxed">
+                      {detail.description}
+                    </p>
+                  </div>
                 </div>
-              </button>
-            ))}
+
+                <div className="pt-8 border-t border-slate-100 relative z-10">
+                  <div className="prose prose-lg max-w-none text-slate-600 leading-relaxed">
+                    <p className="whitespace-pre-line">
+                      {detail.longDescription}
+                    </p>
+                  </div>
+                  
+                  <div className="mt-10 pt-8 flex items-center justify-center md:justify-start gap-4">
+                     <button 
+                       onClick={() => window.dispatchEvent(new CustomEvent('open-chat'))}
+                       className="px-8 py-4 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors shadow-lg hover:shadow-xl flex items-center gap-2"
+                     >
+                       Conversar sobre esta solução <ArrowRight className="w-5 h-5" />
+                     </button>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
+
         </div>
-      </section>
+      </div>
     </div>
   );
 };

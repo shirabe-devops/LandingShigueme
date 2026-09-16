@@ -22,8 +22,10 @@ function App() {
   
   const navigateToService = (id: string) => {
     setSelectedServiceId(id);
-    setCurrentPage('home');
-    window.scrollTo(0, 0);
+    if (currentPage !== 'home') {
+      setCurrentPage('home');
+      window.scrollTo(0, 0);
+    }
   };
 
   const navigateToHome = () => {
