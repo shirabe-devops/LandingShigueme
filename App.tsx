@@ -3,19 +3,17 @@ import React, { useState } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Clients } from './components/Clients';
-import { Services } from './components/Services';
 import { About } from './components/About';
 import { Footer } from './components/Footer';
 import { AIAssistant } from './components/AIAssistant';
 import { PrivacyPolicy } from './components/PrivacyPolicy';
 import { ServiceDetailPage } from './components/ServiceDetailPage';
-import { TaxManagementPage } from './components/TaxManagementPage';
 
-type Page = 'home' | 'privacy' | 'service-detail' | 'tax-management';
+type Page = 'home' | 'privacy';
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
-  const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
+  const [selectedServiceId, setSelectedServiceId] = useState<string>('consultoria-contabil');
 
   const navigateToPrivacy = () => {
     setCurrentPage('privacy');
@@ -24,18 +22,12 @@ function App() {
   
   const navigateToService = (id: string) => {
     setSelectedServiceId(id);
-    setCurrentPage('service-detail');
-    window.scrollTo(0, 0);
-  };
-
-  const navigateToTaxManagement = () => {
-    setCurrentPage('tax-management');
+    setCurrentPage('home');
     window.scrollTo(0, 0);
   };
 
   const navigateToHome = () => {
     setCurrentPage('home');
-    setSelectedServiceId(null);
     window.scrollTo(0, 0); 
   };
 
@@ -47,24 +39,25 @@ function App() {
 
     if (currentPage !== 'home') {
       setCurrentPage('home');
-      setSelectedServiceId(null);
-      // Pequeno delay para garantir que a Home renderizou antes de tentar o scroll
       setTimeout(() => {
         const element = document.getElementById(sectionId);
-        element?.scrollIntoView({ behavior: 'smooth' });
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
       }, 100);
     } else {
       const element = document.getElementById(sectionId);
-      element?.scrollIntoView({ behavior: 'smooth' });
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
   
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900 scroll-smooth">
       
-      {(currentPage === 'home' || currentPage === 'tax-management' || currentPage === 'service-detail') && (
+      {currentPage === 'home' && (
         <Navbar 
-          onNavigateAtuacao={navigateToTaxManagement} 
           onNavigateHome={navigateToHome}
           onNavigateSection={navigateToSection}
         />
@@ -73,32 +66,17 @@ function App() {
       {currentPage === 'home' && (
         <>
           <main className="flex-grow">
-            <Hero />
+            <Hero onNavigateSection={navigateToSection} />
+            <ServiceDetailPage 
+              serviceId={selectedServiceId} 
+              onNavigateToService={navigateToService}
+            />
             <Clients />
-            <Services onSelectService={navigateToService} />
             <About />
           </main>
           <Footer 
             onOpenPrivacy={navigateToPrivacy} 
             onSelectService={navigateToService} 
-            onSelectAtuacao={navigateToTaxManagement} 
-            onNavigateSection={navigateToSection}
-          />
-          <AIAssistant />
-        </>
-      )}
-
-      {currentPage === 'tax-management' && (
-        <>
-          <TaxManagementPage 
-            onBack={navigateToHome} 
-            onGoToServices={() => navigateToSection('services')} 
-            onNavigateToService={navigateToService}
-          />
-          <Footer 
-            onOpenPrivacy={navigateToPrivacy} 
-            onSelectService={navigateToService} 
-            onSelectAtuacao={navigateToTaxManagement} 
             onNavigateSection={navigateToSection}
           />
           <AIAssistant />
@@ -107,23 +85,6 @@ function App() {
 
       {currentPage === 'privacy' && (
         <PrivacyPolicy onBack={navigateToHome} />
-      )}
-
-      {currentPage === 'service-detail' && selectedServiceId && (
-        <>
-          <ServiceDetailPage 
-            serviceId={selectedServiceId} 
-            onBack={() => navigateToSection('services')} 
-            onNavigateToService={navigateToService}
-          />
-          <Footer 
-            onOpenPrivacy={navigateToPrivacy} 
-            onSelectService={navigateToService} 
-            onSelectAtuacao={navigateToTaxManagement} 
-            onNavigateSection={navigateToSection}
-          />
-          <AIAssistant />
-        </>
       )}
     </div>
   );

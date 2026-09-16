@@ -5,39 +5,24 @@ import { IconLinkedIn, IconFacebook, IconInstagram } from './Icons';
 interface FooterProps {
   onOpenPrivacy: () => void;
   onSelectService: (id: string) => void;
-  onSelectAtuacao?: () => void;
   onNavigateSection?: (id: string) => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenPrivacy, onSelectService, onSelectAtuacao, onNavigateSection }) => {
+export const Footer: React.FC<FooterProps> = ({ onOpenPrivacy, onSelectService, onNavigateSection }) => {
   return (
-    <footer className="bg-slate-950 text-slate-400 py-12 border-t border-slate-800">
+    <footer className="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-8">
           <div className="col-span-1 sm:col-span-2 md:col-span-1">
              <button 
                onClick={() => onNavigateSection?.('home')} 
-               className="font-bold text-xl md:text-2xl text-white tracking-tight block mb-4 hover:opacity-80 transition-opacity text-left"
+               className="font-bold text-xl md:text-2xl text-white tracking-tight block mb-4 hover:text-blue-400 transition-colors text-left"
              >
                Shigueme<span className="text-blue-500"> Consultoria Tributária</span>
              </button>
-             <p className="text-sm mb-4">
-               Serviços inteligentes para consultoria estratégica, compliance agro e planejamento tributário.
+             <p className="text-sm mb-4 leading-relaxed">
+               Transformando a complexidade tributária em soluções ágeis, seguras e convenientes para o seu negócio.
              </p>
-          </div>
-
-          <div>
-            <h4 className="text-white font-bold mb-4 uppercase text-sm tracking-wider">Área de Atuação</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <button 
-                  onClick={onSelectAtuacao}
-                  className="hover:text-blue-400 transition-colors text-left"
-                >
-                  Gestão tributária
-                </button>
-              </li>
-            </ul>
           </div>
           
           <div>
