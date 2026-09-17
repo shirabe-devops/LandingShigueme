@@ -96,9 +96,10 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ serviceId,
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           
           {/* Sidebar Navigation */}
-          <div className="lg:col-span-4 flex lg:flex-col overflow-x-auto lg:overflow-visible gap-3 pb-4 lg:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            {Object.values(SERVICE_DETAILS).map((service) => {
-              const isActive = service.id === detail.id;
+          <div className="lg:col-span-4 relative">
+            <div className="flex lg:flex-col overflow-x-auto lg:overflow-visible gap-3 pb-4 lg:pb-0 [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-slate-200 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-blue-600 [&::-webkit-scrollbar-thumb]:rounded-full [scrollbar-width:thin] [scrollbar-color:#2563eb_#e2e8f0] lg:[&::-webkit-scrollbar]:hidden lg:[-ms-overflow-style:none] lg:[scrollbar-width:none]">
+              {Object.values(SERVICE_DETAILS).map((service) => {
+                const isActive = service.id === detail.id;
               return (
                 <button
                   key={service.id}
@@ -123,6 +124,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ serviceId,
                 </button>
               );
             })}
+            </div>
           </div>
 
           {/* Main Content Area */}

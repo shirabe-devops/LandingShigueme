@@ -97,8 +97,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPrivacy, onSelectService, 
         </div>
         
         <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm">
-          <p>&copy; {new Date().getFullYear()} Shigueme Ltda. Todos os direitos reservados.</p>
-          <p className="mt-2 md:mt-0">Desenvolvido com React</p>
+          <p>&copy; {new Date().getFullYear()} Shigueme Consultoria Tributária. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>

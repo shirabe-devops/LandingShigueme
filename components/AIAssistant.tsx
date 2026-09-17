@@ -8,7 +8,7 @@ import {
   formatPhone 
 } from '../utils/validators';
 
-const N8N_WEBHOOK_URL = 'https://n8n.shirabe.com.br/webhook-test/lpshigueme';
+const N8N_WEBHOOK_URL = 'https://n8n.shirabe.com.br/webhook/lpshigueme';
 //teste 'https://n8n.shirabe.com.br/webhook-test/lpshigueme' 
 
 type ChatStep = 
@@ -438,7 +438,7 @@ export const AIAssistant: React.FC = () => {
              </div>
              <div>
                 <p className="text-xs text-slate-600 font-medium leading-tight">
-                  Olá! 👋 Quer reduzir impostos e burocracia na sua empresa? Fale com a gente.
+                  Quer reduzir impostos e burocracia na sua empresa? Fale com a gente.
                 </p>
              </div>
              <button 

@@ -33,6 +33,18 @@ export const About: React.FC = () => {
                 Nosso papel é assumir a burocracia pesada. O seu é continuar crescendo.
               </p>
             </div>
+
+            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="bg-slate-50/50 rounded-xl p-4 border-l-4 border-l-blue-600 shadow-sm flex flex-col justify-center">
+                <h4 className="text-lg font-bold text-slate-900 mb-1">Transparência</h4>
+                <p className="text-sm text-slate-600 leading-relaxed">Clareza total sobre a incidência de IBS e CBS.</p>
+              </div>
+              
+              <div className="bg-slate-50/50 rounded-xl p-4 border-l-4 border-l-emerald-500 shadow-sm flex flex-col justify-center">
+                <h4 className="text-lg font-bold text-slate-900 mb-1">Eficiência</h4>
+                <p className="text-sm text-slate-600 leading-relaxed">Eliminação da cumulatividade e resíduos tributários.</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
