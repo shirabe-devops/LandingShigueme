@@ -127,6 +127,8 @@ const getColorGlowClass = (color: string) => {
 export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ serviceId, onNavigateToService }) => {
   const detail = SERVICE_DETAILS[serviceId];
   const activeOptionRef = React.useRef<HTMLButtonElement | null>(null);
+  const stripContainerRef = React.useRef<HTMLDivElement | null>(null);
+  const isFirstMount = React.useRef(true);
 
   const serviceKeys = Object.keys(SERVICE_DETAILS);
   const currentIndex = Math.max(0, serviceKeys.indexOf(serviceId));
@@ -136,11 +138,18 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ serviceId,
   const nextService = SERVICE_DETAILS[nextServiceId];
 
   React.useEffect(() => {
-    if (activeOptionRef.current) {
-      activeOptionRef.current.scrollIntoView({
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
+      return;
+    }
+
+    if (stripContainerRef.current && activeOptionRef.current) {
+      const container = stripContainerRef.current;
+      const item = activeOptionRef.current;
+      const targetLeft = item.offsetLeft - (container.clientWidth / 2) + (item.clientWidth / 2);
+      container.scrollTo({
+        left: targetLeft,
         behavior: 'smooth',
-        inline: 'center',
-        block: 'nearest',
       });
     }
   }, [serviceId]);
@@ -182,7 +191,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ serviceId,
             </div>
           </div>
 
-          <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-3 pt-1 -mx-4 px-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] touch-pan-x select-none">
+          <div ref={stripContainerRef} className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-3 pt-1 -mx-4 px-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] touch-pan-x select-none">
             {Object.values(SERVICE_DETAILS).map((service) => {
               const isActive = service.id === detail.id;
               return (

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Clients } from './components/Clients';
@@ -14,6 +14,13 @@ type Page = 'home' | 'privacy';
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [selectedServiceId, setSelectedServiceId] = useState<string>('consultoria-contabil');
+
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+  }, []);
 
   const navigateToPrivacy = () => {
     setCurrentPage('privacy');
