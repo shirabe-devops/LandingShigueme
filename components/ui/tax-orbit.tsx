@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ShieldCheck, Layers, DollarSign, Percent, Calculator, TrendingDown, Activity, BarChart3 } from "lucide-react";
+import { ShieldCheck, Layers, DollarSign, Percent, Calculator, TrendingDown, Activity, Coins, FileCheck } from "lucide-react";
 
 export const TaxOrbit = () => {
   return (
@@ -88,6 +88,18 @@ export const TaxOrbit = () => {
         </div>
       </OrbitNode>
 
+      <OrbitNode radius={220} angle={-50} duration={50} reverse>
+        <div className="flex items-center gap-3 bg-[#0f172a]/95 backdrop-blur-sm border border-amber-500/30 rounded-2xl p-3 shadow-[0_0_15px_rgba(245,158,11,0.15)] whitespace-nowrap">
+          <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400">
+            <Coins className="w-4 h-4" />
+          </div>
+          <div>
+            <p className="text-[10px] font-bold text-amber-300 uppercase tracking-wider leading-tight">Créditos Tributários</p>
+            <p className="text-xs font-bold text-white leading-tight">PIS / COFINS / ICMS</p>
+          </div>
+        </div>
+      </OrbitNode>
+
       {/* --- OUTER ORBIT (300px radius) --- */}
       <OrbitNode radius={300} angle={15} duration={60}>
         <div className="flex flex-col gap-2 bg-[#0f172a]/90 backdrop-blur-sm border border-teal-500/30 rounded-2xl p-4 shadow-[0_0_15px_rgba(20,184,166,0.1)] w-48">
@@ -99,6 +111,18 @@ export const TaxOrbit = () => {
           <div className="flex items-center justify-between">
             <span className="text-xs text-slate-400">Cenário</span>
             <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Otimizado</span>
+          </div>
+        </div>
+      </OrbitNode>
+
+      <OrbitNode radius={300} angle={175} duration={60}>
+        <div className="flex items-center gap-3 bg-[#0f172a]/95 backdrop-blur-sm border border-cyan-500/30 rounded-2xl p-3 shadow-[0_0_15px_rgba(6,182,212,0.15)] whitespace-nowrap">
+          <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400">
+            <FileCheck className="w-4 h-4" />
+          </div>
+          <div>
+            <p className="text-[10px] font-bold text-cyan-300 uppercase tracking-wider leading-tight">Conformidade Fiscal</p>
+            <p className="text-xs font-bold text-white leading-tight">CND 100% Regular</p>
           </div>
         </div>
       </OrbitNode>
