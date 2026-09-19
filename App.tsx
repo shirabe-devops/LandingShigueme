@@ -13,7 +13,7 @@ type Page = 'home' | 'privacy';
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
-  const [selectedServiceId, setSelectedServiceId] = useState<string>('consultoria-contabil');
+  const [selectedServiceId, setSelectedServiceId] = useState<string>('adequacao-reforma');
 
   useEffect(() => {
     if ('scrollRestoration' in window.history) {
