@@ -8,7 +8,7 @@ export const TaxOrbit = () => {
     <div className="tax-orbit-container relative w-[700px] h-[700px] flex items-center justify-center scale-[0.38] sm:scale-[0.48] md:scale-[0.62] lg:scale-[0.80] xl:scale-[0.88] origin-center">
       <style>{`
         .tax-orbit-container {
-          --orbit-item-scale: 1.35;
+          --orbit-item-scale: 1.15;
         }
         @media (min-width: 1024px) {
           .tax-orbit-container {
@@ -32,6 +32,9 @@ export const TaxOrbit = () => {
           to { transform: rotate(360deg); }
         }
       `}</style>
+
+      {/* Halo de Profundidade Atmosférica (Glow Tecnológico Discreto) */}
+      <div className="absolute w-[340px] h-[340px] rounded-full bg-blue-600/10 blur-[90px] pointer-events-none" />
 
       {/* ============================================================== */}
       {/* --- 11 ANÉIS RADIAIS INDEPENDENTES (Guias Visuais) --- */}
