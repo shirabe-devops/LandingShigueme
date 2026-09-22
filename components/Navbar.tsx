@@ -37,22 +37,22 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigateHome, onNavigateSectio
               <span className="text-slate-900">
                 Shigueme
               </span>
-              <span className="text-blue-600 font-semibold whitespace-nowrap">Consultoria Tributária</span>
+              <span className="text-blue-700 font-bold whitespace-nowrap">Consultoria Tributária</span>
             </button>
           </div>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-1 items-center">
-            <button onClick={(e) => handleLinkClick(e, onNavigateHome)} className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 rounded-lg transition-all duration-200">Início</button>
+            <button onClick={(e) => handleLinkClick(e, onNavigateHome)} className="px-4 py-2 text-sm font-medium text-slate-700 hover:text-blue-700 hover:bg-slate-50 rounded-lg transition-all duration-200">Início</button>
             <button 
               onClick={(e) => handleLinkClick(e, () => onNavigateSection?.('services'))} 
-              className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 rounded-lg transition-all duration-200"
+              className="px-4 py-2 text-sm font-medium text-slate-700 hover:text-blue-700 hover:bg-slate-50 rounded-lg transition-all duration-200"
             >
               Soluções
             </button>
             <button 
               onClick={(e) => handleLinkClick(e, () => onNavigateSection?.('about'))} 
-              className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 rounded-lg transition-all duration-200"
+              className="px-4 py-2 text-sm font-medium text-slate-700 hover:text-blue-700 hover:bg-slate-50 rounded-lg transition-all duration-200"
             >
               Nossa Experiência
             </button>

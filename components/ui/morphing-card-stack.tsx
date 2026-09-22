@@ -113,12 +113,12 @@ export function MorphingCardStack({
               key={mode}
               onClick={() => setLayout(mode)}
               className={cn(
-                "rounded-md p-2 transition-all",
+                "rounded-md p-2.5 transition-all min-w-[44px] min-h-[44px] flex items-center justify-center",
                 layout === mode
                   ? "bg-blue-600 text-white shadow-lg"
                   : "text-slate-400 hover:text-white hover:bg-slate-800",
               )}
-              aria-label={`Switch to ${mode} layout`}
+              aria-label={`Mudar para visualização em ${mode === 'stack' ? 'pilha' : mode === 'grid' ? 'grade' : 'lista'}`}
             >
               <Icon className="h-4 w-4" />
             </button>

@@ -177,16 +177,21 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ serviceId,
             <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
               Soluções disponíveis ({currentIndex + 1} de {serviceKeys.length})
             </span>
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center -space-x-1">
               {serviceKeys.map((key, idx) => (
                 <button
                   key={key}
+                  type="button"
                   onClick={() => onNavigateToService?.(key)}
                   aria-label={`Ver ${SERVICE_DETAILS[key].shortTitle}`}
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    idx === currentIndex ? 'w-6 bg-blue-600' : 'w-2 bg-slate-300 hover:bg-slate-400'
-                  }`}
-                />
+                  className="min-w-[44px] min-h-[44px] flex items-center justify-center p-1.5 focus:outline-none"
+                >
+                  <span
+                    className={`h-2 rounded-full transition-all duration-300 block ${
+                      idx === currentIndex ? 'w-6 bg-blue-600' : 'w-2 bg-slate-300 hover:bg-slate-400'
+                    }`}
+                  />
+                </button>
               ))}
             </div>
           </div>

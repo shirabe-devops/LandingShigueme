@@ -31,7 +31,17 @@ function App() {
     setSelectedServiceId(id);
     if (currentPage !== 'home') {
       setCurrentPage('home');
-      window.scrollTo(0, 0);
+      setTimeout(() => {
+        const element = document.getElementById('services');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      const element = document.getElementById('services');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 

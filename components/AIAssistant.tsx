@@ -8,7 +8,7 @@ import {
   formatPhone 
 } from '../utils/validators';
 
-const N8N_WEBHOOK_URL = 'https://n8n.shirabe.com.br/webhook/lpshigueme';
+const N8N_WEBHOOK_URL = 'https://n8n.shirabe.com.br/webhook-test/lpshigueme';
 //teste 'https://n8n.shirabe.com.br/webhook-test/lpshigueme' 
 
 type ChatStep = 
@@ -443,9 +443,10 @@ export const AIAssistant: React.FC = () => {
              </div>
              <button 
                 onClick={(e) => { e.stopPropagation(); setShowNotification(false); }}
-                className="text-slate-400 hover:text-slate-600 shrink-0"
+                className="text-slate-400 hover:text-slate-600 shrink-0 p-1 rounded-md min-w-[32px] min-h-[32px] flex items-center justify-center transition-colors"
+                aria-label="Fechar notificação"
              >
-               <IconX className="w-3 h-3" />
+               <IconX className="w-4 h-4" />
              </button>
           </div>
         </div>
@@ -474,7 +475,8 @@ export const AIAssistant: React.FC = () => {
             </div>
             <button 
                onClick={() => setIsOpen(false)}
-               className="p-1.5 hover:bg-slate-800 rounded-lg text-slate-400 transition-colors"
+               className="p-2 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+               aria-label="Fechar chat"
             >
                <IconX className="w-5 h-5" />
             </button>
@@ -533,7 +535,8 @@ export const AIAssistant: React.FC = () => {
                <button 
                   type="submit"
                   disabled={isInputBusy || !userInput.trim()}
-                  className="bg-blue-600 hover:bg-blue-500 text-white p-2.5 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg active:scale-95"
+                  aria-label="Enviar mensagem"
+                  className="bg-blue-600 hover:bg-blue-500 text-white p-2.5 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg active:scale-95 min-w-[44px] min-h-[44px] flex items-center justify-center"
                >
                   <IconSend className="w-5 h-5" />
                </button>

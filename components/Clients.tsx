@@ -2,17 +2,17 @@
 import React, { useState } from 'react';
 
 // ARQUIVO DE CLIENTES - CONFIGURAÇÃO
-// Aqui você define a lista de empresas e as URLs das imagens.
+// Aqui você define a lista de empresas e as URLs das imagens otimizadas para carregamento rápido.
 const clients = [
-  // Objeto do cliente: { nome, url_da_imagem }
-  { name: 'Amidos Crestani', logo: 'https://res.cloudinary.com/dw9ohxxgw/image/upload/v1765898977/amidoscrestani_qj5fpx.jpg' },
-  { name: 'Amidos Nova Era', logo: 'https://res.cloudinary.com/dw9ohxxgw/image/upload/v1765898966/amidosnovaera_ap1jvo.jpg' },
-  { name: 'Amidos Tia Lê', logo: 'https://res.cloudinary.com/dw9ohxxgw/image/upload/v1765898975/amidostiale_f6f5mg.jpg' },
-  { name: 'Auris Ap. Auditivos', logo: 'https://res.cloudinary.com/dw9ohxxgw/image/upload/v1765898966/aurisaparelhosauditivos_aaggwe.jpg' },
-  { name: 'Goma Chico', logo: 'https://res.cloudinary.com/dw9ohxxgw/image/upload/v1765898987/gomachico_aqzyg0.jpg' },
-  { name: 'Samak Pescados', logo: 'https://res.cloudinary.com/dw9ohxxgw/image/upload/v1765898970/samakpescados_ymaxkk.jpg' },
-  { name: 'Vó Corinto', logo: 'https://res.cloudinary.com/dw9ohxxgw/image/upload/v1765898966/vocorinto_sacc2o.jpg' },
-  { name: 'Farinha Glória', logo: 'https://res.cloudinary.com/dw9ohxxgw/image/upload/v1766431235/Farinha_Gl%C3%B3ria_ngxhgr.jpg' },
+  // URLs otimizadas com transformações automáticas do Cloudinary (WebP/AVIF, qualidade automática e largura dimensionada)
+  { name: 'Amidos Crestani', logo: 'https://res.cloudinary.com/dw9ohxxgw/image/upload/f_auto,q_auto,w_360/v1765898977/amidoscrestani_qj5fpx.jpg' },
+  { name: 'Amidos Nova Era', logo: 'https://res.cloudinary.com/dw9ohxxgw/image/upload/f_auto,q_auto,w_360/v1765898966/amidosnovaera_ap1jvo.jpg' },
+  { name: 'Amidos Tia Lê', logo: 'https://res.cloudinary.com/dw9ohxxgw/image/upload/f_auto,q_auto,w_360/v1765898975/amidostiale_f6f5mg.jpg' },
+  { name: 'Auris Ap. Auditivos', logo: 'https://res.cloudinary.com/dw9ohxxgw/image/upload/f_auto,q_auto,w_360/v1765898966/aurisaparelhosauditivos_aaggwe.jpg' },
+  { name: 'Goma Chico', logo: 'https://res.cloudinary.com/dw9ohxxgw/image/upload/f_auto,q_auto,w_360/v1765898987/gomachico_aqzyg0.jpg' },
+  { name: 'Samak Pescados', logo: 'https://res.cloudinary.com/dw9ohxxgw/image/upload/f_auto,q_auto,w_360/v1765898970/samakpescados_ymaxkk.jpg' },
+  { name: 'Vó Corinto', logo: 'https://res.cloudinary.com/dw9ohxxgw/image/upload/f_auto,q_auto,w_360/v1765898966/vocorinto_sacc2o.jpg' },
+  { name: 'Farinha Glória', logo: 'https://res.cloudinary.com/dw9ohxxgw/image/upload/f_auto,q_auto,w_360/v1766431235/Farinha_Gl%C3%B3ria_ngxhgr.jpg' },
 ];
 
 // COMPONENTE INDIVIDUAL DE LOGO
@@ -32,49 +32,49 @@ const ClientLogo: React.FC<{ name: string; logo: string }> = ({ name, logo }) =>
       /* EFEITO PRETO E BRANCO */
       md:grayscale                     /* Desktop: Começa cinza */
       hover:grayscale-0                /* Hover: Fica colorido */
-      
-      /* EFEITO DE OPACIDADE */
-      opacity-80                       /* Começa levemente transparente */
-      hover:opacity-100                /* Hover: Fica nítido */
 
       /* TRANSIÇÃO E ZOOM */
       transition-all duration-300      /* Animação suave */
-      hover:scale-110                  /* Zoom leve no conjunto inteiro */
+      hover:scale-105                  /* Zoom leve no conjunto inteiro */
       
       /* ALTURA DO CONTAINER */
-      h-30                             /* Altura fixa para alinhar os textos em baixo */
+      h-32                             /* Altura para alinhar os textos em baixo */
       md:h-48                          /* Altura maior em telas grandes */
     ">
       
-      {/* AREA DA IMAGEM */}
-      <div className="flex-grow flex items-center justify-center w-full">
+      {/* AREA DA IMAGEM COM OPACIDADE SUAVE */}
+      <div className="flex-grow flex items-center justify-center w-full opacity-90 hover:opacity-100 transition-opacity">
         {!imgError ? (
           <img 
             src={logo} 
             alt={`Logo ${name}`} 
+            width={180}
+            height={100}
             className="
-              h-17                     /* Altura da imagem no Mobile */
-              md:h-25                  /* Altura da imagem no Desktop */
+              h-16                     /* Altura da imagem no Mobile */
+              md:h-24                  /* Altura da imagem no Desktop */
+              w-auto
               max-w-[140px]            /* Largura máxima */
               md:max-w-[180px] 
               object-contain           /* Não distorce a imagem */
             " 
             loading="lazy"
+            decoding="async"
             onError={() => setImgError(true)}
           />
         ) : (
-          <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-slate-300 font-bold border border-slate-200">
+          <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 font-bold border border-slate-200">
             {name.charAt(0)}
           </div>
         )}
       </div>
 
-      {/* NOME DO CLIENTE (Abaixo da logo) */}
+      {/* NOME DO CLIENTE (Abaixo da logo) COM ALTO CONTRASTE */}
       <span className="
         mt-2                           /* Margem superior para afastar da logo */
-        text-[10px] md:text-xs         /* Tamanho da fonte (pequena e elegante) */
-        font-semibold                  /* Peso da fonte semi-negrito */
-        text-slate-500                 /* Cor cinza intermediária */
+        text-[10px] md:text-xs         /* Tamanho da fonte */
+        font-bold                      /* Peso da fonte para nitidez */
+        text-slate-700                 /* Cor com taxa de contraste aprovada no WCAG AA */
         text-center                    /* Centraliza o texto */
         uppercase                      /* Letras maiúsculas */
         tracking-wider                 /* Espaçamento entre letras */
@@ -96,12 +96,12 @@ export const Clients: React.FC = () => {
     ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* TÍTULO DISCRETO */}
+        {/* TÍTULO COM CONTRASTE WCAG AA */}
         <p className="
           text-center 
           text-xs md:text-sm 
           font-bold 
-          text-slate-400 
+          text-slate-700 
           uppercase 
           tracking-[0.2em] 
           mb-12 md:mb-20

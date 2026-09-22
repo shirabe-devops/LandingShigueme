@@ -5,137 +5,150 @@ import { ShieldCheck, Layers, DollarSign, Percent, Calculator, TrendingDown, Act
 
 export const TaxOrbit = () => {
   return (
-    <div className="relative w-[600px] h-[600px] flex items-center justify-center scale-[0.56] sm:scale-[0.65] md:scale-75 lg:scale-[0.85]">
+    <div className="relative w-[720px] h-[720px] flex items-center justify-center scale-[0.52] sm:scale-[0.62] md:scale-[0.72] lg:scale-[0.82] xl:scale-[0.88]">
       <style>{`
-        @keyframes orbit-cw {
-          from { transform: rotate(var(--start-angle)) translateX(var(--radius)) rotate(calc(-1 * var(--start-angle))); }
-          to { transform: rotate(calc(var(--start-angle) + 360deg)) translateX(var(--radius)) rotate(calc(-1 * (var(--start-angle) + 360deg))); }
+        @keyframes orbit-spin-cw {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
-        @keyframes orbit-ccw {
-          from { transform: rotate(var(--start-angle)) translateX(var(--radius)) rotate(calc(-1 * var(--start-angle))); }
-          to { transform: rotate(calc(var(--start-angle) - 360deg)) translateX(var(--radius)) rotate(calc(-1 * (var(--start-angle) - 360deg))); }
+        @keyframes orbit-spin-ccw {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(-360deg); }
+        }
+        @keyframes orbit-counter-cw {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(-360deg); }
+        }
+        @keyframes orbit-counter-ccw {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
       `}</style>
 
-      {/* Orbits */}
-      <div className="absolute w-[280px] h-[280px] rounded-full border border-slate-700/60" />
-      <div className="absolute w-[440px] h-[440px] rounded-full border border-slate-700/60" />
-      <div className="absolute w-[600px] h-[600px] rounded-full border border-slate-700/60" />
+      {/* ============================================================== */}
+      {/* --- 11 ANÉIS RADIAIS INDEPENDENTES (Guias Visuais) --- */}
+      {/* ============================================================== */}
+      <div className="absolute w-[180px] h-[180px] rounded-full border border-slate-700/50 pointer-events-none" />
+      <div className="absolute w-[232px] h-[232px] rounded-full border border-slate-700/35 border-dashed pointer-events-none" />
+      <div className="absolute w-[284px] h-[284px] rounded-full border border-slate-700/50 pointer-events-none" />
+      <div className="absolute w-[336px] h-[336px] rounded-full border border-slate-700/35 border-dashed pointer-events-none" />
+      <div className="absolute w-[388px] h-[388px] rounded-full border border-slate-700/50 pointer-events-none" />
+      <div className="absolute w-[440px] h-[440px] rounded-full border border-slate-700/35 border-dashed pointer-events-none" />
+      <div className="absolute w-[492px] h-[492px] rounded-full border border-slate-700/50 pointer-events-none" />
+      <div className="absolute w-[544px] h-[544px] rounded-full border border-slate-700/35 border-dashed pointer-events-none" />
+      <div className="absolute w-[596px] h-[596px] rounded-full border border-slate-700/50 pointer-events-none" />
+      <div className="absolute w-[648px] h-[648px] rounded-full border border-slate-700/35 border-dashed pointer-events-none" />
+      <div className="absolute w-[700px] h-[700px] rounded-full border border-slate-700/50 pointer-events-none" />
 
-      {/* --- INNER ORBIT (140px radius) --- */}
-      <OrbitNode radius={140} angle={-45} duration={40}>
-        <div className="flex items-center gap-3 bg-[#0f172a] border border-slate-700/80 rounded-full p-2 pr-5 shadow-xl whitespace-nowrap">
-          <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400">
-            <ShieldCheck className="w-5 h-5" />
+      {/* Núcleo Central Gravitacional */}
+      <div className="absolute w-20 h-20 rounded-full bg-blue-600/10 border border-blue-500/20 blur-sm pointer-events-none animate-pulse" />
+      <div className="absolute w-10 h-10 rounded-full bg-gradient-to-tr from-blue-500/20 to-indigo-500/20 border border-blue-400/40 flex items-center justify-center pointer-events-none shadow-[0_0_20px_rgba(59,130,246,0.3)]">
+        <div className="w-2.5 h-2.5 rounded-full bg-blue-400 animate-ping opacity-75" />
+      </div>
+
+      {/* ============================================================== */}
+      {/* --- CADA ELEMENTO EM SEU PRÓPRIO ANEL INDEPENDENTE (1 a 11) --- */}
+      {/* Ângulos iniciais maximamente espalhados por todo o círculo (0° a 360°) */}
+      {/* ============================================================== */}
+
+      {/* ANEL 1: Raio 90px (Sentido Horário - CW) | Ângulo: 0° (Leste) */}
+      <OrbitNode radius={90} angle={0} duration={28}>
+        <div className="w-7 h-7 rounded-lg bg-[#0b1329]/95 border border-slate-700/80 flex items-center justify-center text-slate-300 shadow-md">
+          <Calculator className="w-3.5 h-3.5" />
+        </div>
+      </OrbitNode>
+
+      {/* ANEL 2: Raio 116px (Sentido Anti-Horário - CCW) | Ângulo: 130° (Sudoeste) */}
+      <OrbitNode radius={116} angle={130} duration={34} reverse>
+        <div className="flex items-center gap-1.5 bg-[#0b1329]/95 border border-blue-500/40 rounded-full py-1 px-2.5 shadow-lg whitespace-nowrap">
+          <ShieldCheck className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+          <span className="text-[10px] font-bold text-white tracking-tight">Risco 0%</span>
+        </div>
+      </OrbitNode>
+
+      {/* ANEL 3: Raio 142px (Sentido Horário - CW) | Ângulo: 260° (Oeste/Noroeste) */}
+      <OrbitNode radius={142} angle={260} duration={30}>
+        <div className="flex items-center gap-1 bg-[#0b1329]/95 border border-emerald-500/30 rounded-full py-0.5 px-2 shadow-md whitespace-nowrap">
+          <TrendingDown className="w-3 h-3 text-emerald-400 shrink-0" />
+          <span className="text-[10px] font-bold text-emerald-400">-12% Carga</span>
+        </div>
+      </OrbitNode>
+
+      {/* ANEL 4: Raio 168px (Sentido Anti-Horário - CCW) | Ângulo: 35° (Nordeste) */}
+      <OrbitNode radius={168} angle={35} duration={40} reverse>
+        <div className="flex items-center gap-2 bg-[#0b1329]/95 border border-indigo-500/30 rounded-full py-1 px-3 shadow-lg whitespace-nowrap">
+          <Activity className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+          <span className="text-[9px] font-bold text-indigo-300 uppercase tracking-wider">Revisão Fiscal</span>
+        </div>
+      </OrbitNode>
+
+      {/* ANEL 5: Raio 194px (Sentido Horário - CW) | Ângulo: 165° (Sul/Sudoeste) */}
+      <OrbitNode radius={194} angle={165} duration={36}>
+        <div className="w-7 h-7 rounded-lg bg-[#0b1329]/95 border border-teal-500/30 flex items-center justify-center text-teal-400 shadow-md">
+          <Percent className="w-3.5 h-3.5" />
+        </div>
+      </OrbitNode>
+
+      {/* ANEL 6: Raio 220px (Sentido Anti-Horário - CCW) | Ângulo: 295° (Noroeste) */}
+      <OrbitNode radius={220} angle={295} duration={48} reverse>
+        <div className="flex items-center gap-2.5 bg-[#0b1329]/95 border border-emerald-500/40 rounded-2xl py-1.5 px-3.5 shadow-xl whitespace-nowrap">
+          <div className="w-7 h-7 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+            <DollarSign className="w-4 h-4" />
           </div>
-          <div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-tight">Risco Fiscal</p>
-            <p className="text-sm font-bold text-white leading-tight">0% Detectado</p>
+          <div className="leading-tight">
+            <p className="text-[8px] font-bold text-slate-400 uppercase tracking-wider">Economia</p>
+            <p className="text-sm font-bold text-white">R$ 1.25 M</p>
           </div>
         </div>
       </OrbitNode>
 
-      <OrbitNode radius={140} angle={160} duration={40}>
-        <div className="flex items-center gap-3 bg-[#0f172a]/90 backdrop-blur-sm border border-indigo-500/30 rounded-2xl p-3 shadow-[0_0_15px_rgba(99,102,241,0.15)] whitespace-nowrap">
-          <div className="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400">
-            <Activity className="w-4 h-4" />
+      {/* ANEL 7: Raio 246px (Sentido Horário - CW) | Ângulo: 70° (Leste/Nordeste) */}
+      <OrbitNode radius={246} angle={70} duration={42}>
+        <div className="flex items-center gap-1.5 bg-[#0b1329]/95 border border-slate-700/80 rounded-xl py-1 px-2.5 shadow-md whitespace-nowrap">
+          <div className="flex items-end gap-0.5 h-3.5">
+            <div className="w-1 bg-slate-600 rounded-t-xs h-1/3" />
+            <div className="w-1 bg-slate-500 rounded-t-xs h-1/2" />
+            <div className="w-1 bg-slate-400 rounded-t-xs h-3/4" />
+            <div className="w-1 bg-emerald-400 rounded-t-xs h-full shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
           </div>
-          <div>
-            <p className="text-[10px] font-bold text-indigo-300 uppercase tracking-wider leading-tight">Revisão Fiscal</p>
-            <p className="text-xs font-mono text-slate-300 leading-tight">EM PROCESSO...</p>
-          </div>
-        </div>
-      </OrbitNode>
-      
-      <OrbitNode radius={140} angle={80} duration={40}>
-        <div className="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700 flex items-center justify-center text-slate-400 shadow-lg">
-          <Calculator className="w-4 h-4" />
+          <span className="text-[9px] font-bold text-slate-300 uppercase tracking-wider">Projeção 2026</span>
         </div>
       </OrbitNode>
 
-      {/* --- MIDDLE ORBIT (220px radius) --- */}
-      <OrbitNode radius={220} angle={135} duration={50} reverse>
-        <div className="flex items-center gap-4 bg-[#0f172a] border border-slate-700/80 rounded-2xl p-4 shadow-xl whitespace-nowrap">
-          <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">
-            <DollarSign className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 leading-tight">Economia Anual</p>
-            <p className="text-2xl font-bold text-white leading-tight">R$ 1.25 M</p>
-          </div>
+      {/* ANEL 8: Raio 272px (Sentido Anti-Horário - CCW) | Ângulo: 200° (Sul) */}
+      <OrbitNode radius={272} angle={200} duration={52} reverse>
+        <div className="flex items-center gap-2 bg-[#0b1329]/95 border border-amber-500/30 rounded-full py-1 px-3 shadow-lg whitespace-nowrap">
+          <Coins className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+          <span className="text-[10px] font-bold text-amber-300">Créditos PIS/COFINS</span>
         </div>
       </OrbitNode>
 
-      <OrbitNode radius={220} angle={-150} duration={50} reverse>
-        <div className="flex flex-col gap-2 bg-[#0f172a]/90 backdrop-blur-sm border border-slate-700/80 rounded-2xl p-4 shadow-xl w-32">
-          <div className="flex items-end gap-1.5 h-10 mb-1 justify-center">
-            <div className="w-3 bg-slate-600 rounded-t-sm h-1/3" />
-            <div className="w-3 bg-slate-500 rounded-t-sm h-1/2" />
-            <div className="w-3 bg-slate-400 rounded-t-sm h-3/4" />
-            <div className="w-3 bg-emerald-400 rounded-t-sm h-full shadow-[0_0_8px_rgba(52,211,153,0.5)]" />
-          </div>
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider text-center">Projeção 2026</p>
+      {/* ANEL 9: Raio 298px (Sentido Horário - CW) | Ângulo: 330° (Norte/Nordeste) */}
+      <OrbitNode radius={298} angle={330} duration={46}>
+        <div className="flex items-center gap-2 bg-[#0b1329]/95 border border-cyan-500/30 rounded-full py-1 px-3 shadow-lg whitespace-nowrap">
+          <FileCheck className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+          <span className="text-[10px] font-bold text-cyan-300">CND 100% Regular</span>
         </div>
       </OrbitNode>
 
-      <OrbitNode radius={220} angle={50} duration={50} reverse>
-        <div className="flex flex-col gap-1 bg-[#0f172a]/90 backdrop-blur-sm border border-slate-700/80 rounded-xl p-3 shadow-xl">
-           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Carga Ef.</p>
-           <div className="flex items-center gap-1 text-emerald-400">
-             <TrendingDown className="w-4 h-4" />
-             <span className="font-bold">-12%</span>
-           </div>
-        </div>
-      </OrbitNode>
-
-      <OrbitNode radius={220} angle={-50} duration={50} reverse>
-        <div className="flex items-center gap-3 bg-[#0f172a]/95 backdrop-blur-sm border border-amber-500/30 rounded-2xl p-3 shadow-[0_0_15px_rgba(245,158,11,0.15)] whitespace-nowrap">
-          <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400">
-            <Coins className="w-4 h-4" />
+      {/* ANEL 10: Raio 324px (Sentido Anti-Horário - CCW) | Ângulo: 100° (Sudeste) */}
+      <OrbitNode radius={324} angle={100} duration={60} reverse>
+        <div className="flex items-center gap-2.5 bg-[#0b1329]/95 border border-teal-500/40 rounded-2xl py-1.5 px-3.5 shadow-xl whitespace-nowrap">
+          <div className="w-7 h-7 rounded-lg bg-teal-500/20 flex items-center justify-center text-teal-400 shrink-0">
+            <Layers className="w-4 h-4" />
           </div>
-          <div>
-            <p className="text-[10px] font-bold text-amber-300 uppercase tracking-wider leading-tight">Créditos Tributários</p>
-            <p className="text-xs font-bold text-white leading-tight">PIS / COFINS / ICMS</p>
+          <div className="leading-tight">
+            <p className="text-[8px] font-bold text-teal-300 uppercase tracking-wider">Simulação IVA</p>
+            <p className="text-xs font-bold text-white">Cenário Otimizado</p>
           </div>
         </div>
       </OrbitNode>
 
-      {/* --- OUTER ORBIT (300px radius) --- */}
-      <OrbitNode radius={300} angle={15} duration={60}>
-        <div className="flex flex-col gap-2 bg-[#0f172a]/90 backdrop-blur-sm border border-teal-500/30 rounded-2xl p-4 shadow-[0_0_15px_rgba(20,184,166,0.1)] w-48">
-          <div className="flex items-center gap-2 text-teal-400">
-            <Layers className="w-5 h-5" />
-            <span className="font-bold text-white text-sm">Simulação IVA</span>
-          </div>
-          <div className="w-full h-[1px] bg-slate-700 my-1" />
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-slate-400">Cenário</span>
-            <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Otimizado</span>
-          </div>
-        </div>
-      </OrbitNode>
-
-      <OrbitNode radius={300} angle={175} duration={60}>
-        <div className="flex items-center gap-3 bg-[#0f172a]/95 backdrop-blur-sm border border-cyan-500/30 rounded-2xl p-3 shadow-[0_0_15px_rgba(6,182,212,0.15)] whitespace-nowrap">
-          <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400">
-            <FileCheck className="w-4 h-4" />
-          </div>
-          <div>
-            <p className="text-[10px] font-bold text-cyan-300 uppercase tracking-wider leading-tight">Conformidade Fiscal</p>
-            <p className="text-xs font-bold text-white leading-tight">CND 100% Regular</p>
-          </div>
-        </div>
-      </OrbitNode>
-
-      <OrbitNode radius={300} angle={240} duration={60}>
-        <div className="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700 flex items-center justify-center text-emerald-400 shadow-lg">
-          <DollarSign className="w-4 h-4" />
-        </div>
-      </OrbitNode>
-
-      <OrbitNode radius={300} angle={100} duration={60}>
-        <div className="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700 flex items-center justify-center text-teal-400 shadow-lg">
-          <Percent className="w-4 h-4" />
+      {/* ANEL 11: Raio 350px (Sentido Horário - CW) | Ângulo: 230° (Sudoeste/Oeste) */}
+      <OrbitNode radius={350} angle={230} duration={54}>
+        <div className="flex items-center gap-2 bg-[#0b1329]/95 border border-blue-500/40 rounded-full py-1 px-3 shadow-xl whitespace-nowrap">
+          <ShieldCheck className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+          <span className="text-[10px] font-bold text-blue-300">Blindagem Ativa</span>
         </div>
       </OrbitNode>
 
@@ -154,14 +167,43 @@ interface OrbitNodeProps {
 const OrbitNode: React.FC<OrbitNodeProps> = ({ radius, angle, duration, reverse, children }) => {
   return (
     <div
-      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+      className="absolute top-1/2 left-1/2 rounded-full pointer-events-none"
       style={{
-        '--radius': `${radius}px`,
-        '--start-angle': `${angle}deg`,
-        animation: `orbit-${reverse ? 'ccw' : 'cw'} ${duration}s linear infinite`
-      } as React.CSSProperties}
+        width: `${radius * 2}px`,
+        height: `${radius * 2}px`,
+        transform: `translate(-50%, -50%) rotate(${angle}deg)`,
+        willChange: 'transform',
+      }}
     >
-      {children}
+      <div
+        className="w-full h-full rounded-full"
+        style={{
+          animation: `${reverse ? 'orbit-spin-ccw' : 'orbit-spin-cw'} ${duration}s linear infinite`,
+          willChange: 'transform',
+        }}
+      >
+        <div
+          className="absolute top-1/2 left-full pointer-events-auto"
+          style={{
+            transform: 'translate(-50%, -50%)',
+          }}
+        >
+          <div
+            style={{
+              animation: `${reverse ? 'orbit-counter-ccw' : 'orbit-counter-cw'} ${duration}s linear infinite`,
+              willChange: 'transform',
+            }}
+          >
+            <div
+              style={{
+                transform: `rotate(${-angle}deg)`,
+              }}
+            >
+              {children}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

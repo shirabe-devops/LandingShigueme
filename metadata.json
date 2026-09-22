@@ -1,5 +1,6 @@
 {
   "name": "ShiguemeConsultoriaTributaria",
   "description": "Serviços de consultoria tributária, BPO financeiro e contabilidade estratégica para empresas.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
