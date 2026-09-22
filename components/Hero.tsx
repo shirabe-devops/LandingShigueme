@@ -33,7 +33,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigateSection }) => {
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300 font-medium">o crescimento do seu negócio.</span>
               </p>
 
-              <div className="flex flex-col sm:flex-row items-start justify-start gap-4">
+              <div className="flex flex-col sm:flex-row items-start justify-start gap-4 relative z-30">
                 <button 
                   onClick={() => onNavigateSection?.('services')}
                   className="w-full sm:w-auto px-6 py-3 text-sm rounded-full bg-white text-slate-900 font-medium hover:bg-slate-100 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] flex items-center justify-center gap-2"
@@ -51,15 +51,15 @@ export const Hero: React.FC<HeroProps> = ({ onNavigateSection }) => {
           </div>
 
           {/* Right Column / Background Orbit Animation */}
-          <div className="relative lg:absolute lg:inset-0 flex items-center justify-center lg:justify-end lg:-mr-[10%] w-full -mt-20 sm:-mt-10 lg:mt-0 -mb-16 lg:mb-0 pointer-events-none opacity-100">
-            <div className="pointer-events-auto">
+          <div className="relative lg:absolute lg:inset-0 flex items-center justify-center lg:justify-end lg:-mr-[10%] w-full mt-4 mb-6 sm:mt-6 sm:mb-8 lg:my-0 h-[310px] sm:h-[360px] lg:h-auto pointer-events-none opacity-100 overflow-visible">
+            <div className="pointer-events-auto flex items-center justify-center">
               <TaxOrbit />
             </div>
           </div>
         </div>
 
         {/* Feature Cards below */}
-        <div className="mt-8 lg:mt-20 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto w-full relative z-20">
+        <div className="mt-16 sm:mt-20 lg:mt-24 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto w-full relative z-20">
           <div className="bg-[#0f172a]/60 backdrop-blur-md p-6 rounded-2xl border border-slate-800 text-center flex flex-col items-center">
             <div className="w-10 h-10 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-xl flex items-center justify-center mb-4">
               <Zap className="w-5 h-5" />
